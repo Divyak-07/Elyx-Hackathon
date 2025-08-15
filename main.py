@@ -1,12 +1,6 @@
 # main.py
-# This file contains the final FastAPI application, including the new /episodes endpoint.
-# To run this file:
-# 1. Make sure you have FastAPI and Uvicorn installed:
-#    pip install -r requirements.txt
-# 2. Save the JSON data into a file named `journey_data.json`
-#    in the same directory as this `main.py` file.
-# 3. In your terminal, run the following command:
-#    uvicorn main:app --reload
+# This is the simplified backend. The AI /chat endpoint has been removed.
+# Its only job is to serve the journey_data.json file.
 
 import json
 from typing import List, Optional, Dict
@@ -33,7 +27,6 @@ class PersonaState(BaseModel):
     after: str
 
 class EpisodeAnalysis(BaseModel):
-    """Defines the structure for the AI-generated episode summary."""
     month_name: str
     primary_goal_trigger: str
     friction_points: List[str]
@@ -48,15 +41,12 @@ app = FastAPI(
 )
 
 # --- CORS Middleware ---
-# ** THE FIX IS HERE **
 origins = [
     "null",
     "http://localhost",
     "http://localhost:8080",
-    "https://elyx-hackathon.netlify.app" # <-- ADD YOUR NETLIFY URL HERE
+    "https://elyx-hackathon.netlify.app"
 ]
-
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -82,34 +72,24 @@ MESSAGES = load_journey_data()
 
 # --- AI Analysis Simulation ---
 def get_ai_analysis(month_name: str, messages: List[Message]) -> EpisodeAnalysis:
-    """Simulates an AI call to generate an episode analysis."""
     pre_written_analyses = {
         "February 2025": {
             "primary_goal_trigger": "Rohan expresses anxiety over an upcoming board presentation, citing dizziness and fatigue. The team makes this a key milestone.",
             "friction_points": ["Rohan notes his Garmin HR zones are wrong.", "He feels the initial Health Optimization Plan is sparse ('mostly headings').", "Impatience over delays in receiving medical records."],
             "final_outcome": "A foundational plan is created, a successful jet-lag experiment is conducted, and a decision is made to upgrade his wearable to a Whoop strap for better data.",
-            "persona_analysis": {
-                "before": "Anxious and data-skeptical, questioning the value and speed of the service.",
-                "after": "Becoming more engaged after seeing a tangible win (jet-lag experiment) and a clear path forward (Whoop upgrade)."
-            }
+            "persona_analysis": { "before": "Anxious and data-skeptical, questioning the value and speed of the service.", "after": "Becoming more engaged after seeing a tangible win (jet-lag experiment) and a clear path forward (Whoop upgrade)." }
         },
         "May 2025": {
             "primary_goal_trigger": "Rohan wakes up with a sudden viral illness, jeopardizing a major presentation.",
             "friction_points": ["Significant frustration over the setback and feeling that progress is being undone.", "The need to postpone a critical work commitment."],
             "final_outcome": "The Elyx team executes a 'Sick Day Protocol,' managing the illness with data from his wearable, coordinating logistics, and providing a medical letter. Rohan recovers and the team structures his safe return to training.",
-            "persona_analysis": {
-                "before": "Feeling confident and seeing consistent progress in his health metrics.",
-                "after": "Frustrated by the setback, but ultimately sees the value of the team's crisis management, making the plan more robust."
-            }
+            "persona_analysis": { "before": "Feeling confident and seeing consistent progress in his health metrics.", "after": "Frustrated by the setback, but ultimately sees the value of the team's crisis management, making the plan more robust." }
         },
         "August 2025": {
             "primary_goal_trigger": "With a stable health baseline, Rohan shifts his focus to setting long-term, ambitious goals for longevity and peak performance.",
             "friction_points": ["Significant muscle soreness from a new strength program affects his work focus.", "Minor irritation from the Whoop strap requires logistical support."],
             "final_outcome": "Long-term, measurable goals are formalized (e.g., deadlift 1.5x bodyweight). New experiments are run to optimize recovery. Rohan decides to pursue learning piano as a cognitive longevity intervention.",
-            "persona_analysis": {
-                "before": "An engaged member focused on optimizing current health metrics.",
-                "after": "A proactive co-manager of his health, thinking in multi-year timelines and integrating health goals (piano) with cognitive performance."
-            }
+            "persona_analysis": { "before": "An engaged member focused on optimizing current health metrics.", "after": "A proactive co-manager of his health, thinking in multi-year timelines and integrating health goals (piano) with cognitive performance." }
         }
     }
     if month_name in pre_written_analyses:
@@ -120,10 +100,7 @@ def get_ai_analysis(month_name: str, messages: List[Message]) -> EpisodeAnalysis
             primary_goal_trigger="Ongoing health optimization and data tracking.",
             friction_points=["General logistical coordination for travel and appointments."],
             final_outcome="Steady progress on established health goals.",
-            persona_analysis={
-                "before": "Following the established plan.",
-                "after": "More integrated and consistent with the established health protocols."
-            }
+            persona_analysis={ "before": "Following the established plan.", "after": "More integrated and consistent with the established health protocols." }
         )
 
 # --- API Endpoints ---

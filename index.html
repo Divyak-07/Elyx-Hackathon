@@ -40,6 +40,9 @@
         .modal-content { background-color: #1f2937; margin: 10% auto; padding: 2rem; border: 1px solid #4b5563; width: 80%; max-width: 600px; border-radius: 0.75rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5); }
         .modal-close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
         .modal-close:hover, .modal-close:focus { color: #fff; text-decoration: none; }
+
+        /* Chat Agent Styles */
+        #chat-agent-window { display: none; position: absolute; bottom: 80px; right: 1.5rem; width: 350px; height: 450px; background-color: #1f2937; border: 1px solid #4b5563; border-radius: 0.75rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5); transition: all 0.3s ease; }
     </style>
 </head>
 <body class="antialiased">
@@ -70,13 +73,36 @@
             </aside>
 
             <!-- Center Panel: Conversation -->
-            <section class="flex-1 flex flex-col bg-gray-800">
+            <section class="flex-1 flex flex-col bg-gray-800 relative">
                 <div class="border-b border-gray-700 p-4 space-y-3">
                     <h2 id="conversation-title" class="text-lg font-semibold text-white">Full Conversation</h2>
                     <div id="filter-container" class="flex flex-wrap gap-2"></div>
                 </div>
                 <div id="conversation-container" class="flex-1 overflow-y-auto p-6 space-y-4">
                     <div class="text-center text-gray-400">Loading conversation...</div>
+                </div>
+                <!-- Chat Agent Button -->
+                <div class="p-4 border-t border-gray-700">
+                     <button id="chat-agent-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg flex items-center justify-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.839 8.839 0 01-4.082-.982L1 18l1.982-4.918A8.966 8.966 0 011 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM4.415 14.182A7.003 7.003 0 0010 15a7 7 0 100-14 7.003 7.003 0 00-5.585 2.818" clip-rule="evenodd" /></svg>
+                        Ask Elyx AI
+                    </button>
+                </div>
+                <!-- Chat Agent Window -->
+                <div id="chat-agent-window" class="flex flex-col">
+                    <div class="p-3 bg-gray-700 rounded-t-lg flex justify-between items-center">
+                        <h3 class="text-md font-semibold text-white">Elyx AI Assistant</h3>
+                        <button id="chat-close-btn" class="text-gray-300 hover:text-white">&times;</button>
+                    </div>
+                    <div id="chat-messages" class="flex-1 p-3 overflow-y-auto space-y-3">
+                        <div class="p-2 bg-indigo-500/50 rounded-lg text-sm">Hi! Ask me why a decision was made. For example: "Why was the Whoop strap ordered?"</div>
+                    </div>
+                    <div class="p-3 border-t border-gray-600">
+                        <form id="chat-form" class="flex gap-2">
+                            <input type="text" id="chat-input" class="flex-1 bg-gray-900 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Ask a question...">
+                            <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 rounded-lg">Send</button>
+                        </form>
+                    </div>
                 </div>
             </section>
 
@@ -112,6 +138,12 @@
         const modal = document.getElementById('analysis-modal');
         const modalBody = document.getElementById('modal-body');
         const modalCloseBtn = document.getElementById('modal-close-btn');
+        const chatAgentBtn = document.getElementById('chat-agent-btn');
+        const chatAgentWindow = document.getElementById('chat-agent-window');
+        const chatCloseBtn = document.getElementById('chat-close-btn');
+        const chatForm = document.getElementById('chat-form');
+        const chatInput = document.getElementById('chat-input');
+        const chatMessages = document.getElementById('chat-messages');
 
         // --- STATE MANAGEMENT ---
         let allMessages = [];
@@ -253,6 +285,42 @@
             });
         }
 
+        // --- CHAT AGENT LOGIC (SIMULATED) ---
+        function findDecisionAndReasons(query) {
+            const keywords = query.toLowerCase().match(/\b(\w+)\b/g) || [];
+            const decisions = allMessages.filter(m => m.tags.type === 'decision');
+            let bestMatch = null;
+            let maxScore = 0;
+
+            decisions.forEach(decision => {
+                let score = 0;
+                keywords.forEach(keyword => {
+                    if (decision.content.toLowerCase().includes(keyword)) {
+                        score++;
+                    }
+                });
+                if (score > maxScore) {
+                    maxScore = score;
+                    bestMatch = decision;
+                }
+            });
+
+            if (bestMatch) {
+                const reasons = allMessages.filter(m => m.tags.type === 'reason' && m.tags.linked_id === bestMatch.id);
+                return { decision: bestMatch, reasons };
+            }
+            return null;
+        }
+
+        function addChatMessage(message, isUser = false) {
+            const bgColor = isUser ? 'bg-blue-600' : 'bg-indigo-500/50';
+            const messageEl = document.createElement('div');
+            messageEl.className = `p-2 ${bgColor} rounded-lg text-sm`;
+            messageEl.innerHTML = message;
+            chatMessages.appendChild(messageEl);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
         // --- EVENT HANDLERS ---
         async function handleConversationClick(event) {
             const messageElement = event.target.closest('[data-message-id]');
@@ -289,6 +357,28 @@
             renderAnalysisModal(analysisData);
         }
 
+        function handleChatSubmit(event) {
+            event.preventDefault();
+            const query = chatInput.value.trim();
+            if (!query) return;
+
+            addChatMessage(query, true);
+            chatInput.value = '';
+
+            const result = findDecisionAndReasons(query);
+            if (result && result.reasons.length > 0) {
+                let response = `The decision to "${result.decision.content.substring(0, 50)}..." was made for the following reasons:<ul class="list-disc list-inside mt-2">`;
+                result.reasons.forEach(reason => {
+                    response += `<li>${reason.content}</li>`;
+                });
+                response += '</ul>';
+                addChatMessage(response);
+                highlightTrace(result);
+            } else {
+                addChatMessage("I couldn't find a specific reason for that decision in the log. Please try rephrasing your question or check the conversation manually.");
+            }
+        }
+
         // --- INITIALIZATION ---
         async function initializeApp() {
             const [timelineData, allMessagesData, metricsData] = await Promise.all([
@@ -307,6 +397,11 @@
             filterContainer.addEventListener('click', handleFilterClick);
             timelineContainer.addEventListener('click', handleTimelineClick);
             
+            // Chat Agent Listeners
+            chatAgentBtn.addEventListener('click', () => { chatAgentWindow.style.display = 'flex'; });
+            chatCloseBtn.addEventListener('click', () => { chatAgentWindow.style.display = 'none'; });
+            chatForm.addEventListener('submit', handleChatSubmit);
+            
             // Modal close logic
             modalCloseBtn.onclick = () => { modal.style.display = "none"; };
             window.onclick = (event) => { if (event.target == modal) { modal.style.display = "none"; } };
@@ -316,4 +411,3 @@
     </script>
 </body>
 </html>
-
