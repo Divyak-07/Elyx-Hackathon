@@ -48,7 +48,14 @@ app = FastAPI(
 )
 
 # --- CORS Middleware ---
-origins = ["null", "http://localhost", "http://localhost:8080"]
+# ** THE FIX IS HERE **
+origins = [
+    "null",
+    "http://localhost",
+    "http://localhost:8080",
+    "https://elyx-hackathon.netlify.app/" # <-- ADD YOUR NETLIFY URL HERE
+]
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -73,13 +80,8 @@ def load_journey_data() -> List[Message]:
 MESSAGES = load_journey_data()
 
 # --- AI Analysis Simulation ---
-# In a real application, this function would call an external LLM.
-# For this hackathon, we'll simulate the AI's output with pre-written analyses
-# for a few key months to demonstrate the feature.
 def get_ai_analysis(month_name: str, messages: List[Message]) -> EpisodeAnalysis:
     """Simulates an AI call to generate an episode analysis."""
-    
-    # Pre-written analysis based on the sample journey format
     pre_written_analyses = {
         "February 2025": {
             "primary_goal_trigger": "Rohan expresses anxiety over an upcoming board presentation, citing dizziness and fatigue. The team makes this a key milestone.",
@@ -109,11 +111,9 @@ def get_ai_analysis(month_name: str, messages: List[Message]) -> EpisodeAnalysis
             }
         }
     }
-
     if month_name in pre_written_analyses:
         return EpisodeAnalysis(month_name=month_name, **pre_written_analyses[month_name])
     else:
-        # Default analysis for other months
         return EpisodeAnalysis(
             month_name=month_name,
             primary_goal_trigger="Ongoing health optimization and data tracking.",
@@ -126,7 +126,6 @@ def get_ai_analysis(month_name: str, messages: List[Message]) -> EpisodeAnalysis
         )
 
 # --- API Endpoints ---
-
 @app.get("/", tags=["General"])
 async def read_root():
     return {"message": "Welcome to the Elyx Member Journey API"}
@@ -171,15 +170,6 @@ async def get_internal_metrics():
 
 @app.get("/episodes/{month_name}", response_model=EpisodeAnalysis, tags=["Episodes"])
 async def get_episode_analysis(month_name: str):
-    """
-    Generates an AI-powered analysis for a specific month.
-    - **month_name**: The name of the month (e.g., "January 2025").
-    """
-    # This endpoint is a placeholder for a real AI analysis.
-    # In a real app, you'd filter messages for the month and send to an LLM.
-    # For now, we use our simulation function.
-    
-    # Filter messages for the given month to pass to the analysis function
     try:
         month_messages = [
             msg for msg in MESSAGES 
@@ -193,3 +183,4 @@ async def get_episode_analysis(month_name: str):
 
     analysis = get_ai_analysis(month_name, month_messages)
     return analysis
+
