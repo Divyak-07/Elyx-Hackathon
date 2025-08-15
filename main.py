@@ -53,7 +53,7 @@ origins = [
     "null",
     "http://localhost",
     "http://localhost:8080",
-    "https://elyx-hackathon.netlify.app/" # <-- ADD YOUR NETLIFY URL HERE
+    "https://elyx-hackathon.netlify.app" # <-- ADD YOUR NETLIFY URL HERE
 ]
 
 
@@ -184,6 +184,7 @@ async def get_episode_analysis(month_name: str):
 
     analysis = get_ai_analysis(month_name, month_messages)
     return analysis
+
 
 
 
