@@ -56,21 +56,6 @@ origins = [
     "https://elyx-hackathon.netlify.app/" # <-- ADD YOUR NETLIFY URL HERE
 ]
 
-const express = require('express');
-const cors = require('cors');
-const app = express();
-
-// Use the cors middleware with a specific origin allowed
-app.use(cors({
-  origin: 'https://elyx-hackathon.netlify.app'
-}));
-
-// ... your other routes and middleware
-
-app.listen(3000, () => {
-  console.log('Server listening on port 3000');
-});
-
 
 app.add_middleware(
     CORSMiddleware,
@@ -199,5 +184,6 @@ async def get_episode_analysis(month_name: str):
 
     analysis = get_ai_analysis(month_name, month_messages)
     return analysis
+
 
 
