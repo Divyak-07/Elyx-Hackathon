@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elyx Member Journey | Rohan Patel</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js for Metrics Chart -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Custom Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111827;
+            color: #d1d5db;
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1f2937; }
+        ::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #6b7280; }
+        
+        .highlight-decision { transition: all 0.3s ease; box-shadow: 0 0 15px 2px rgba(59, 130, 246, 0.6); border: 1px solid rgba(59, 130, 246, 0.8); }
+        .highlight-reason { transition: all 0.3s ease; box-shadow: 0 0 15px 2px rgba(16, 185, 129, 0.6); border: 1px solid rgba(16, 185, 129, 0.8); }
+        .decision-bubble { cursor: pointer; border: 1px solid #4f46e5; transition: background-color 0.2s ease-in-out; }
+        .decision-bubble:hover { background-color: #4338ca; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .message-bubble { animation: fadeIn 0.3s ease-out forwards; }
+
+        /* Modal Styles */
+        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(5px); }
+        .modal-content { background-color: #1f2937; margin: 10% auto; padding: 2rem; border: 1px solid #4b5563; width: 80%; max-width: 600px; border-radius: 0.75rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5); }
+        .modal-close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .modal-close:hover, .modal-close:focus { color: #fff; text-decoration: none; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="flex flex-col h-screen">
+        <!-- Header -->
+        <header class="bg-gray-900/70 backdrop-blur-sm border-b border-gray-700 p-4 shadow-lg z-10">
+            <div class="max-w-7xl mx-auto flex justify-between items-center">
+                <div>
+                    <h1 class="text-2xl font-bold text-white">Elyx Member Journey</h1>
+                    <p class="text-sm text-gray-400">Visualizing the 8-Month Journey of Rohan Patel</p>
+                </div>
+                <div id="api-status" class="flex items-center space-x-2">
+                    <span class="text-sm font-medium text-gray-400">API Status:</span>
+                    <div id="api-indicator" class="w-3 h-3 rounded-full bg-yellow-500 animate-pulse"></div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex overflow-hidden">
+            <!-- Left Panel: Timeline -->
+            <aside class="w-1/3 lg:w-1/4 bg-gray-900/50 border-r border-gray-700 overflow-y-auto p-6">
+                <h2 class="text-lg font-semibold text-white mb-4">Journey Timeline</h2>
+                <div id="timeline-container" class="relative border-l-2 border-gray-600 pl-6 space-y-8">
+                    <div class="text-center text-gray-400">Loading timeline...</div>
+                </div>
+            </aside>
+
+            <!-- Center Panel: Conversation -->
+            <section class="flex-1 flex flex-col bg-gray-800">
+                <div class="border-b border-gray-700 p-4 space-y-3">
+                    <h2 id="conversation-title" class="text-lg font-semibold text-white">Full Conversation</h2>
+                    <div id="filter-container" class="flex flex-wrap gap-2"></div>
+                </div>
+                <div id="conversation-container" class="flex-1 overflow-y-auto p-6 space-y-4">
+                    <div class="text-center text-gray-400">Loading conversation...</div>
+                </div>
+            </section>
+
+            <!-- Right Panel: Metrics -->
+            <aside class="w-1/3 lg:w-1/4 bg-gray-900/50 border-l border-gray-700 overflow-y-auto p-6">
+                <h2 class="text-lg font-semibold text-white mb-4">Internal Metrics</h2>
+                <div id="metrics-container" class="space-y-4">
+                    <div class="text-center text-gray-400">Loading metrics...</div>
+                </div>
+            </aside>
+        </main>
+    </div>
+
+    <!-- AI Analysis Modal -->
+    <div id="analysis-modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" id="modal-close-btn">&times;</span>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <script>
+        // --- CONFIGURATION ---
+        const API_BASE_URL = 'http://127.0.0.1:8000';
+
+        // --- DOM ELEMENT REFERENCES ---
+        const timelineContainer = document.getElementById('timeline-container');
+        const conversationContainer = document.getElementById('conversation-container');
+        const metricsContainer = document.getElementById('metrics-container');
+        const conversationTitle = document.getElementById('conversation-title');
+        const apiIndicator = document.getElementById('api-indicator');
+        const filterContainer = document.getElementById('filter-container');
+        const modal = document.getElementById('analysis-modal');
+        const modalBody = document.getElementById('modal-body');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
+
+        // --- STATE MANAGEMENT ---
+        let allMessages = [];
+        let metricsChart = null;
+
+        // --- MAPPING & HELPERS ---
+        const ROLE_ICONS = { 'Concierge': '📞', 'Medical Strategist': '🩺', 'Performance Scientist': '📊', 'Nutritionist': '🍎', 'Physiotherapist': '💪', 'Concierge Lead': '⭐', 'Member': '👤', 'Personal Assistant': '📋' };
+
+        // --- API FUNCTIONS ---
+        async function fetchData(endpoint) {
+            try {
+                const response = await fetch(`${API_BASE_URL}${endpoint}`);
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                if (apiIndicator.classList.contains('bg-yellow-500')) {
+                    apiIndicator.classList.remove('bg-yellow-500', 'animate-pulse');
+                    apiIndicator.classList.add('bg-green-500');
+                }
+                return await response.json();
+            } catch (error) {
+                console.error(`Failed to fetch from ${endpoint}:`, error);
+                apiIndicator.classList.remove('bg-yellow-500', 'animate-pulse');
+                apiIndicator.classList.add('bg-red-500');
+                return null;
+            }
+        }
+
+        // --- RENDER FUNCTIONS ---
+        function renderTimeline(milestones) {
+            if (!milestones || milestones.length === 0) {
+                timelineContainer.innerHTML = '<p class="text-red-400">Could not load timeline.</p>';
+                return;
+            }
+            const milestonesByMonth = milestones.reduce((acc, msg) => {
+                const month = new Date(msg.timestamp).toLocaleString('default', { month: 'long', year: 'numeric' });
+                if (!acc[month]) acc[month] = [];
+                acc[month].push(msg);
+                return acc;
+            }, {});
+            let timelineHTML = '';
+            for (const month in milestonesByMonth) {
+                timelineHTML += `<button class="month-title text-md font-semibold text-blue-400 -ml-1 mb-4 hover:underline" data-month-name="${month}">${month}</button>`;
+                milestonesByMonth[month].forEach(milestone => {
+                    const date = new Date(milestone.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                    timelineHTML += `<div class="mb-8"><div class="absolute w-4 h-4 bg-blue-500 rounded-full -left-2 border-2 border-gray-900"></div><p class="text-sm text-gray-400">${date}</p><p class="font-medium text-white">${milestone.content}</p></div>`;
+                });
+            }
+            timelineContainer.innerHTML = timelineHTML;
+        }
+
+        function renderConversation(messages, filterRole = null) {
+            if (!messages || messages.length === 0) {
+                conversationContainer.innerHTML = '<p class="text-red-400">Could not load conversation.</p>';
+                return;
+            }
+            const filteredMessages = filterRole ? messages.filter(msg => msg.role === filterRole || msg.role === 'Member') : messages;
+            conversationTitle.textContent = filterRole ? `Conversation with ${filterRole}` : 'Full Conversation';
+            let conversationHTML = '';
+            let lastDate = null;
+            filteredMessages.forEach(msg => {
+                const msgDate = new Date(msg.timestamp).toLocaleDateString();
+                if (msgDate !== lastDate) {
+                    conversationHTML += `<div class="text-center my-4"><span class="bg-gray-700 text-gray-300 text-xs font-medium px-3 py-1 rounded-full">${new Date(msg.timestamp).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</span></div>`;
+                    lastDate = msgDate;
+                }
+                const isMember = msg.role === 'Member';
+                const alignment = isMember ? 'justify-end' : 'justify-start';
+                const bgColor = isMember ? 'bg-blue-600' : 'bg-gray-600';
+                const senderName = isMember ? 'You (Rohan Patel)' : `${msg.sender} (${msg.role})`;
+                const icon = ROLE_ICONS[msg.role] || '👤';
+                const isDecision = msg.tags.type === 'decision';
+                const extraBubbleClasses = isDecision ? 'decision-bubble' : '';
+                const decisionIndicatorHTML = isDecision ? '<p class="text-xs text-indigo-200 mt-2 font-semibold border-t border-indigo-400/50 pt-1">💡 Click to see why</p>' : '';
+                conversationHTML += `<div class="flex ${alignment} message-bubble" data-message-id="${msg.id}" data-message-type="${msg.tags.type || ''}"><div class="max-w-md lg:max-w-lg px-4 py-2 rounded-lg ${bgColor} text-white shadow-md ${extraBubbleClasses}"><p class="text-sm font-bold mb-1">${icon} ${senderName}</p><p class="text-sm">${msg.content.replace(/\n/g, '<br>')}</p><p class="text-xs text-gray-300 text-right mt-1">${new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>${decisionIndicatorHTML}</div></div>`;
+            });
+            conversationContainer.innerHTML = conversationHTML || '<p class="text-center text-gray-400">No messages match this filter.</p>';
+        }
+
+        function renderMetrics(metrics) {
+            if (!metrics) {
+                metricsContainer.innerHTML = '<p class="text-red-400">Could not load metrics.</p>';
+                return;
+            }
+            metricsContainer.innerHTML = `<div class="bg-gray-800 p-4 rounded-lg shadow"><p class="text-gray-400 text-sm">Total Elyx Team Interactions</p><p class="text-2xl font-bold text-white">${metrics.total_elyx_team_interactions}</p></div><div class="bg-gray-800 p-4 rounded-lg shadow"><p class="text-gray-400 text-sm mb-2">Interactions by Role</p><canvas id="metricsChart"></canvas></div>`;
+            renderMetricsChart(metrics.interactions_by_role);
+        }
+
+        function renderMetricsChart(data) {
+            const ctx = document.getElementById('metricsChart').getContext('2d');
+            if (metricsChart) metricsChart.destroy();
+            metricsChart = new Chart(ctx, {
+                type: 'bar',
+                data: { labels: Object.keys(data), datasets: [{ label: 'Interactions', data: Object.values(data), backgroundColor: 'rgba(59, 130, 246, 0.5)', borderColor: 'rgba(59, 130, 246, 1)', borderWidth: 1 }] },
+                options: { indexAxis: 'y', scales: { x: { ticks: { color: '#d1d5db' } }, y: { ticks: { color: '#d1d5db' } } }, plugins: { legend: { display: false } } }
+            });
+        }
+
+        function renderFilterControls(messages) {
+            const roles = [...new Set(messages.filter(m => m.role !== 'Member' && m.role !== 'Personal Assistant').map(m => m.role))];
+            let filterHTML = '<button class="filter-btn active px-3 py-1 text-sm font-medium rounded-full bg-blue-600 text-white" data-role="all">All</button>';
+            roles.forEach(role => {
+                filterHTML += `<button class="filter-btn px-3 py-1 text-sm font-medium rounded-full bg-gray-700 text-gray-300 hover:bg-gray-600" data-role="${role}">${ROLE_ICONS[role]} ${role}</button>`;
+            });
+            filterContainer.innerHTML = filterHTML;
+        }
+
+        function renderAnalysisModal(analysis) {
+            if (!analysis) {
+                modalBody.innerHTML = '<p class="text-red-400">Could not load analysis for this episode.</p>';
+                return;
+            }
+            modalBody.innerHTML = `
+                <h2 class="text-2xl font-bold text-white mb-4">Episode Analysis: ${analysis.month_name}</h2>
+                <div class="space-y-4 text-gray-300">
+                    <div><h3 class="font-semibold text-blue-400">Primary Goal / Trigger</h3><p>${analysis.primary_goal_trigger}</p></div>
+                    <div><h3 class="font-semibold text-blue-400">Friction Points</h3><ul class="list-disc list-inside">${analysis.friction_points.map(fp => `<li>${fp}</li>`).join('')}</ul></div>
+                    <div><h3 class="font-semibold text-blue-400">Final Outcome</h3><p>${analysis.final_outcome}</p></div>
+                    <div>
+                        <h3 class="font-semibold text-blue-400 mb-2">Stateful Persona Analysis</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-gray-800 p-3 rounded-lg"><h4 class="font-semibold text-green-400">Before State</h4><p class="text-sm">${analysis.persona_analysis.before}</p></div>
+                            <div class="bg-gray-800 p-3 rounded-lg"><h4 class="font-semibold text-green-400">After State</h4><p class="text-sm">${analysis.persona_analysis.after}</p></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function highlightTrace(traceData) {
+            document.querySelectorAll('.highlight-decision, .highlight-reason').forEach(el => el.classList.remove('highlight-decision', 'highlight-reason'));
+            if (!traceData) return;
+            const decisionEl = document.querySelector(`[data-message-id='${traceData.decision.id}'] > div`);
+            if (decisionEl) {
+                decisionEl.classList.add('highlight-decision');
+                decisionEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            traceData.reasons.forEach(reason => {
+                const reasonEl = document.querySelector(`[data-message-id='${reason.id}'] > div`);
+                if (reasonEl) reasonEl.classList.add('highlight-reason');
+            });
+        }
+
+        // --- EVENT HANDLERS ---
+        async function handleConversationClick(event) {
+            const messageElement = event.target.closest('[data-message-id]');
+            if (!messageElement) return;
+            const messageType = messageElement.dataset.messageType;
+            const messageId = messageElement.dataset.messageId;
+            if (messageType === 'decision') {
+                const traceData = await fetchData(`/messages/decision/${messageId}`);
+                highlightTrace(traceData);
+            } else {
+                highlightTrace(null);
+            }
+        }
+
+        function handleFilterClick(event) {
+            if (!event.target.classList.contains('filter-btn')) return;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-blue-600', 'text-white');
+                btn.classList.add('bg-gray-700', 'text-gray-300');
+            });
+            const clickedBtn = event.target;
+            clickedBtn.classList.add('active', 'bg-blue-600', 'text-white');
+            clickedBtn.classList.remove('bg-gray-700', 'text-gray-300');
+            const role = clickedBtn.dataset.role;
+            renderConversation(allMessages, role === 'all' ? null : role);
+        }
+
+        async function handleTimelineClick(event) {
+            if (!event.target.classList.contains('month-title')) return;
+            const monthName = event.target.dataset.monthName;
+            modalBody.innerHTML = '<p>Generating AI analysis...</p>';
+            modal.style.display = 'block';
+            const analysisData = await fetchData(`/episodes/${encodeURIComponent(monthName)}`);
+            renderAnalysisModal(analysisData);
+        }
+
+        // --- INITIALIZATION ---
+        async function initializeApp() {
+            const [timelineData, allMessagesData, metricsData] = await Promise.all([
+                fetchData('/messages/timeline'),
+                fetchData('/messages'),
+                fetchData('/metrics/internal')
+            ]);
+            allMessages = allMessagesData || [];
+
+            renderTimeline(timelineData);
+            renderConversation(allMessages);
+            renderMetrics(metricsData);
+            renderFilterControls(allMessages);
+
+            conversationContainer.addEventListener('click', handleConversationClick);
+            filterContainer.addEventListener('click', handleFilterClick);
+            timelineContainer.addEventListener('click', handleTimelineClick);
+            
+            // Modal close logic
+            modalCloseBtn.onclick = () => { modal.style.display = "none"; };
+            window.onclick = (event) => { if (event.target == modal) { modal.style.display = "none"; } };
+        }
+
+        document.addEventListener('DOMContentLoaded', initializeApp);
+    </script>
+</body>
+</html>

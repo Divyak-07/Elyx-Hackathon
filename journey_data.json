@@ -1,0 +1,1791 @@
+[
+  {
+    "id": 1,
+    "timestamp": "2025-01-15T14:15:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "Ruby. My Garmin is logging consistently high intensity minutes, even on rest days. I suspect it's my POTS/long COVID. My current health management is ad-hoc. I need a proper medical review.",
+    "tags": {
+      "type": "reason",
+      "linked_id": 5
+    }
+  },
+  {
+    "id": 2,
+    "timestamp": "2025-01-15T14:16:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "My current supplement list is attached.",
+    "tags": {
+      "type": "information"
+    }
+  },
+  {
+    "id": 3,
+    "timestamp": "2025-01-15T14:38:00Z",
+    "sender": "Ruby",
+    "role": "Concierge",
+    "content": "Hi Rohan, thank you for sharing this. We've received your supplement list. Are you experiencing any other symptoms like dizziness or shortness of breath? I am flagging this for Dr. Warren to review immediately as Priority 1.",
+    "tags": {
+      "type": "information"
+    }
+  },
+  {
+    "id": 4,
+    "timestamp": "2025-01-15T14:40:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "Some dizziness on standing. No SOB.",
+    "tags": {
+      "type": "reason",
+      "linked_id": 5
+    }
+  },
+  {
+    "id": 5,
+    "timestamp": "2025-01-16T10:00:00Z",
+    "sender": "Dr. Warren",
+    "role": "Medical Strategist",
+    "content": "Rohan, Dr. Warren here. I've reviewed your initial submission. To proceed with a clinical-grade strategy, we must consolidate your complete medical records from all previous specialists. This is non-negotiable to ensure safety.",
+    "tags": {
+      "type": "decision",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 6,
+    "timestamp": "2025-01-16T10:05:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "Acknowledged. How long will that take?",
+    "tags": {
+      "type": "question"
+    }
+  },
+  {
+    "id": 7,
+    "timestamp": "2025-01-16T10:10:00Z",
+    "sender": "Ruby",
+    "role": "Concierge",
+    "content": "The timeline can vary depending on the clinics' response speed, but we will manage the entire process. We typically aim to have all records within 2-3 weeks and will provide you with daily updates.",
+    "tags": {
+      "type": "information"
+    }
+  },
+  {
+    "id": 8,
+    "timestamp": "2025-01-17T11:00:00Z",
+    "sender": "Ruby",
+    "role": "Concierge",
+    "content": "Good morning. The first step is a comprehensive Lifestyle Consultation with our Head of Performance, Advik. I will check his schedule and come back to you with options that fit your stated preference for mornings.",
+    "tags": {
+      "type": "plan_update",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 9,
+    "timestamp": "2025-01-18T15:00:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "I have not heard about scheduling the Advik consult.",
+    "tags": {
+      "type": "friction_point",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 10,
+    "timestamp": "2025-01-18T15:05:00Z",
+    "sender": "Ruby",
+    "role": "Concierge",
+    "content": "My apologies. I am coordinating with his schedule now and will have options for you by EOD.",
+    "tags": {
+      "type": "information"
+    }
+  },
+  {
+    "id": 11,
+    "timestamp": "2025-01-21T10:30:00Z",
+    "sender": "Ruby",
+    "role": "Concierge",
+    "content": "A thought from our team: while we gather records, would you be open to completing a 3-day food log? No need to change anything, just record what you eat. This gives our nutritionist, Carla, a baseline.",
+    "tags": {
+      "type": "plan_update",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 12,
+    "timestamp": "2025-01-21T10:35:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "Fine. Send me the template.",
+    "tags": {
+      "type": "confirmation"
+    }
+  },
+  {
+    "id": 13,
+    "timestamp": "2025-01-24T11:30:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "I have a last minute flight to Chicago tomorrow. Any recommended healthy restaurants near The Loop for a business dinner?",
+    "tags": {
+      "type": "reason",
+      "linked_id": 14
+    }
+  },
+  {
+    "id": 14,
+    "timestamp": "2025-01-24T12:30:00Z",
+    "sender": "Ruby",
+    "role": "Concierge",
+    "content": "Based on your preferences, I recommend \"True Food Kitchen\". It focuses on an anti-inflammatory menu. I've attached their menu. Would you like me to make a reservation for you?",
+    "tags": {
+      "type": "decision",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 15,
+    "timestamp": "2025-01-24T12:31:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "Yes. 7:30 PM for 4 people.",
+    "tags": {
+      "type": "confirmation"
+    }
+  },
+  {
+    "id": 16,
+    "timestamp": "2025-01-24T12:32:00Z",
+    "sender": "Ruby",
+    "role": "Concierge",
+    "content": "Done. Reservation is confirmed. It's in your calendar.",
+    "tags": {
+      "type": "milestone",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 17,
+    "timestamp": "2025-01-30T14:25:00Z",
+    "sender": "Carla",
+    "role": "Nutritionist",
+    "content": "Hi Rohan, Carla here. Thank you for the food logs. A quick initial observation: your caffeine intake is high, especially in the afternoon. This could be impacting your sleep and exacerbating your autonomic symptoms. Just something to be aware of.",
+    "tags": {
+      "type": "information"
+    }
+  },
+  {
+    "id": 18,
+    "timestamp": "2025-01-30T14:30:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "I need it for performance.",
+    "tags": {
+      "type": "information"
+    }
+  },
+  {
+    "id": 19,
+    "timestamp": "2025-01-30T14:32:00Z",
+    "sender": "Carla",
+    "role": "Nutritionist",
+    "content": "Understood. We won't change anything yet. The goal is to first understand, then optimize.",
+    "tags": {
+      "type": "information"
+    }
+  },
+  {
+    "id": 20,
+    "timestamp": "2025-02-03T09:00:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "I have a critical board presentation on the 20th. This dizziness and fatigue is making me anxious.",
+    "tags": {
+      "type": "reason",
+      "linked_id": 21
+    }
+  },
+  {
+    "id": 21,
+    "timestamp": "2025-02-03T09:10:00Z",
+    "sender": "Ruby",
+    "role": "Concierge",
+    "content": "Understood. We are making this a key focus. All the groundwork we are doing now is aimed at building a strategy to ensure you are at your peak for events like this. We will keep that date as our first major milestone.",
+    "tags": {
+      "type": "milestone",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 22,
+    "timestamp": "2025-02-05T09:05:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "Before the call today: the Garmin HR zones are wrong. It thinks I'm sprinting when I'm walking. Advik needs to address that.",
+    "tags": {
+      "type": "reason",
+      "linked_id": 35
+    }
+  },
+  {
+    "id": 23,
+    "timestamp": "2025-02-05T10:00:00Z",
+    "sender": "Advik",
+    "role": "Performance Scientist",
+    "content": "Rohan, I'm on the chat now. Understood on the HR zones. This is a classic issue with generic age-based formulas and a key reason we need to establish your personal metabolic profile.",
+    "tags": {
+      "type": "information"
+    }
+  },
+  {
+    "id": 24,
+    "timestamp": "2025-02-05T11:30:00Z",
+    "sender": "Advik",
+    "role": "Performance Scientist",
+    "content": "Good first call. I am creating the first draft of the Health Optimization Plan now. As discussed, I am looping in Carla and Rachel to provide their initial assessments.",
+    "tags": {
+      "type": "plan_update",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 25,
+    "timestamp": "2025-02-08T11:05:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "I've reviewed the v0.9 document. It's mostly headings.",
+    "tags": {
+      "type": "friction_point",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 26,
+    "timestamp": "2025-02-08T11:10:00Z",
+    "sender": "Advik",
+    "role": "Performance Scientist",
+    "content": "Correct. It is the framework we will now systematically populate.",
+    "tags": {
+      "type": "information"
+    }
+  },
+  {
+    "id": 27,
+    "timestamp": "2025-02-14T13:15:00Z",
+    "sender": "Advik",
+    "role": "Performance Scientist",
+    "content": "I see you have a last-minute trip to NY next week. This is a perfect opportunity to run our first experiment. Let's try the meal-timing shift we discussed to mitigate jet lag. This is especially important given the proximity to your board presentation.",
+    "tags": {
+      "type": "decision",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 28,
+    "timestamp": "2025-02-14T13:20:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "Fine.",
+    "tags": {
+      "type": "confirmation"
+    }
+  },
+  {
+    "id": 29,
+    "timestamp": "2025-02-18T11:00:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "Landed in NY. I don't feel great, but I don't feel as wrecked as usual. Maybe a 20% improvement.",
+    "tags": {
+      "type": "reason",
+      "linked_id": 30
+    }
+  },
+  {
+    "id": 30,
+    "timestamp": "2025-02-18T11:15:00Z",
+    "sender": "Advik",
+    "role": "Performance Scientist",
+    "content": "A 20% improvement on a subjective scale is a significant win for a first, simple intervention. That's an excellent signal. It suggests your biology is responsive. We've logged this as a successful experiment.",
+    "tags": {
+      "type": "milestone",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 31,
+    "timestamp": "2025-02-20T16:55:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "What's the status of the Dr. Tan records? It's been 7 business days. The board meeting is getting closer. I need a plan.",
+    "tags": {
+      "type": "friction_point",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 32,
+    "timestamp": "2025-02-20T17:01:00Z",
+    "sender": "Ruby",
+    "role": "Concierge",
+    "content": "Hi Rohan. I understand your urgency. We just got off the phone with them. The file has been sent to their outbound fax queue. We are monitoring our e-fax portal continuously.",
+    "tags": {
+      "type": "information"
+    }
+  },
+  {
+    "id": 33,
+    "timestamp": "2025-02-21T09:30:00Z",
+    "sender": "Ruby",
+    "role": "Concierge",
+    "content": "Good news. The records from Dr. Tan's clinic have arrived. This completes the data gathering for Pillar 1.",
+    "tags": {
+      "type": "milestone",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 34,
+    "timestamp": "2025-02-28T15:00:00Z",
+    "sender": "Dr. Warren",
+    "role": "Medical Strategist",
+    "content": "Rohan, I've completed the full review of all prior records. The previous cardiologists confirmed POTS but their management advice was generic (\"drink more water, avoid triggers\"). They lacked the tools for personalized, data-driven lifestyle modification.",
+    "tags": {
+      "type": "reason",
+      "linked_id": 35
+    }
+  },
+  {
+    "id": 35,
+    "timestamp": "2025-02-28T15:05:00Z",
+    "sender": "Dr. Warren",
+    "role": "Medical Strategist",
+    "content": "The key missing element is granular, daily data on your autonomic nervous system. Your Garmin gives us a blurry photo; we need high-definition video. I strongly recommend we upgrade your biotelemetry to a Whoop strap to properly manage your condition. It is essential for moving forward with a real strategy.",
+    "tags": {
+      "type": "decision",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 36,
+    "timestamp": "2025-02-28T15:10:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "If it will get me results, do it.",
+    "tags": {
+      "type": "confirmation"
+    }
+  },
+  {
+    "id": 37,
+    "timestamp": "2025-02-28T15:11:00Z",
+    "sender": "Ruby",
+    "role": "Concierge",
+    "content": "Understood. I will place the order for a Whoop 4.0 with priority shipping.",
+    "tags": {
+      "type": "information"
+    }
+  },
+  {
+    "id": 38,
+    "timestamp": "2025-03-01T10:00:00Z",
+    "sender": "Ruby",
+    "role": "Concierge",
+    "content": "Good morning, Rohan. As we're now at the three-month mark, it's time to schedule your first full diagnostic test panel. This will give us a deep look at your biomarkers and track progress. We can have a phlebotomist come to your home or office. What works best?",
+    "tags": {
+      "type": "plan_update",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 39,
+    "timestamp": "2025-03-01T11:30:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "Office is better. Some time next week.",
+    "tags": {
+      "type": "confirmation"
+    }
+  },
+  {
+    "id": 40,
+    "timestamp": "2025-03-01T11:35:00Z",
+    "sender": "Ruby",
+    "role": "Concierge",
+    "content": "Perfect. I'll coordinate with Sarah to find a slot next week. The test requires a 12-hour fast. I'll send over the full instructions.",
+    "tags": {
+      "type": "internal_metric",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 41,
+    "timestamp": "2025-03-03T14:15:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "I was reading about NAD+ precursors and their effect on cellular energy. What is the team's view on supplementing with NMN or NR?",
+    "tags": {
+      "type": "question"
+    }
+  },
+  {
+    "id": 42,
+    "timestamp": "2025-03-03T14:45:00Z",
+    "sender": "Dr. Warren",
+    "role": "Medical Strategist",
+    "content": "Rohan, Dr. Warren here. An excellent question. The evidence on NMN/NR is still emerging, and quality varies. We typically prefer to address energy at the foundational level—improving mitochondrial health via targeted exercise and nutrition—before adding complex supplements. Let's see what your bloodwork shows first; it will give us clues about your metabolic health.",
+    "tags": {
+      "type": "information"
+    }
+  },
+  {
+    "id": 43,
+    "timestamp": "2025-03-04T09:00:00Z",
+    "sender": "Ruby",
+    "role": "Concierge",
+    "content": "Hi Rohan, a quick confirmation. The phlebotomist is scheduled for tomorrow at 8:30 AM in your office. The fasting instructions have been sent to you and Sarah.",
+    "tags": {
+      "type": "information"
+    }
+  },
+  {
+    "id": 44,
+    "timestamp": "2025-03-04T09:01:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "Confirmed.",
+    "tags": {
+      "type": "confirmation"
+    }
+  },
+  {
+    "id": 45,
+    "timestamp": "2025-03-10T15:00:00Z",
+    "sender": "Dr. Warren",
+    "role": "Medical Strategist",
+    "content": "Rohan, we have the initial results from your blood panel. I've reviewed them, and overall things look solid, but there's a key area to focus on. Your ApoB is 110 mg/dL. This is a more accurate measure of your 'bad' cholesterol particles and is elevated. This becomes a primary focus for your long-term heart disease risk reduction goal.",
+    "tags": {
+      "type": "milestone",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 46,
+    "timestamp": "2025-03-10T15:05:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "110. Understood. What's the plan to address it?",
+    "tags": {
+      "type": "reason",
+      "linked_id": 47
+    }
+  },
+  {
+    "id": 47,
+    "timestamp": "2025-03-10T15:15:00Z",
+    "sender": "Dr. Warren",
+    "role": "Medical Strategist",
+    "content": "This will be a multi-pillar effort. Carla will lead with dietary changes, and Rachel's exercise plan will be critical. We will aggressively target this with lifestyle changes and re-test in three months.",
+    "tags": {
+      "type": "decision",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 48,
+    "timestamp": "2025-03-11T11:00:00Z",
+    "sender": "Carla",
+    "role": "Nutritionist",
+    "content": "Hi Rohan. Following Dr. Warren's analysis, I've designed a nutritional protocol to lower your ApoB. The focus is on increasing soluble fiber and reducing saturated fat. I've added a list of recommended food swaps to your plan, like switching butter to olive oil and adding psyllium husk to a daily smoothie.",
+    "tags": {
+      "type": "plan_update",
+      "linked_id": 47
+    }
+  },
+  {
+    "id": 49,
+    "timestamp": "2025-03-11T11:30:00Z",
+    "sender": "Rachel",
+    "role": "Physiotherapist",
+    "content": "And from my side, Rohan, I've updated your exercise plan in the app. Since it's been two weeks, we're progressing. I've increased the intensity of your Zone 2 cardio sessions, which is crucial for improving cardiovascular health and will support the ApoB goal.",
+    "tags": {
+      "type": "plan_update",
+      "linked_id": 47
+    }
+  },
+  {
+    "id": 50,
+    "timestamp": "2025-03-11T16:00:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "Team, I've reviewed the updated nutrition and exercise plans. I need to be transparent. I have a last-minute business trip to the US for 8 days starting this weekend. I won't have my home cook, and hotel gyms are a mixed bag. Realistically, I can stick to this new, stricter plan maybe 50% of the time while I'm away.",
+    "tags": {
+      "type": "friction_point",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 51,
+    "timestamp": "2025-03-11T16:15:00Z",
+    "sender": "Neel",
+    "role": "Concierge Lead",
+    "content": "Rohan, Neel here. Thank you for that transparency. This is exactly the kind of feedback that helps us make the plan work for you, not against you. This isn't a failure—it's a design constraint. Let's adapt.",
+    "tags": {
+      "type": "decision",
+      "linked_id": 50
+    }
+  },
+  {
+    "id": 52,
+    "timestamp": "2025-03-11T16:20:00Z",
+    "sender": "Carla",
+    "role": "Nutritionist",
+    "content": "Understood. For your travel, let's simplify. Forget the specific swaps. Focus on one rule: at every meal, add a vegetable or a fruit. For cardio, we'll find a simple hotel-friendly alternative.",
+    "tags": {
+      "type": "plan_update",
+      "linked_id": 50
+    }
+  },
+  {
+    "id": 53,
+    "timestamp": "2025-03-11T16:25:00Z",
+    "sender": "Rachel",
+    "role": "Physiotherapist",
+    "content": "Exactly. I'll create a \"Travel-Ready\" version of your workout program that uses only bodyweight and resistance bands. It will be in your app by tomorrow morning. The goal during travel is consistency, not perfection.",
+    "tags": {
+      "type": "plan_update",
+      "linked_id": 50
+    }
+  },
+  {
+    "id": 54,
+    "timestamp": "2025-03-11T16:26:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "This is better. Practical and achievable. Thank you.",
+    "tags": {
+      "type": "confirmation"
+    }
+  },
+  {
+    "id": 55,
+    "timestamp": "2025-03-18T13:00:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "(From the US) I'm feeling jet-lagged. It's impacting my focus in meetings. Is there anything I can do mid-day?",
+    "tags": {
+      "type": "reason",
+      "linked_id": 56
+    }
+  },
+  {
+    "id": 56,
+    "timestamp": "2025-03-18T13:30:00Z",
+    "sender": "Advik",
+    "role": "Performance Scientist",
+    "content": "Advik here. A key strategy is to get 10-15 minutes of morning sunlight as soon as you wake up, with no sunglasses. It's the most powerful signal to reset your body clock. Also, a short, 20-minute walk after lunch can help regulate your blood sugar and improve afternoon energy levels. Avoid heavy carbohydrate lunches.",
+    "tags": {
+      "type": "decision",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 57,
+    "timestamp": "2025-03-28T17:00:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "Back in Singapore. The travel workout was manageable. I probably stuck to the 'add a fruit/vegetable' rule about 70% of the time.",
+    "tags": {
+      "type": "information"
+    }
+  },
+  {
+    "id": 58,
+    "timestamp": "2025-03-28T17:15:00Z",
+    "sender": "Advik",
+    "role": "Performance Scientist",
+    "content": "Welcome back. That's a great result for a travel week. Let's get you back on the full plan starting tomorrow. We'll monitor your Whoop data closely to see how quickly your body re-adapts to the home time zone.",
+    "tags": {
+      "type": "plan_update",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 59,
+    "timestamp": "2025-04-01T09:00:00Z",
+    "sender": "Advik",
+    "role": "Performance Scientist",
+    "content": "Good morning, Rohan. Welcome back. I'm looking at your Whoop data, and it shows a strong recovery score of 85% this morning. Your body has re-adapted to the Singapore time zone faster than last time. It's a good sign of increasing resilience.",
+    "tags": {
+      "type": "milestone",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 60,
+    "timestamp": "2025-04-01T09:30:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "Good. I feel less foggy. Let's get back to the main plan.",
+    "tags": {
+      "type": "confirmation"
+    }
+  },
+  {
+    "id": 61,
+    "timestamp": "2025-04-01T10:15:00Z",
+    "sender": "Carla",
+    "role": "Nutritionist",
+    "content": "Great to hear, Rohan. Now that you're back, let's refocus on the ApoB-lowering nutrition protocol. Your cook has the full list of recommended food swaps. I'll be checking in later this week.",
+    "tags": {
+      "type": "plan_update",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 62,
+    "timestamp": "2025-04-02T14:00:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "Did the strength workout today. Felt good to be back in my own gym.",
+    "tags": {
+      "type": "information"
+    }
+  },
+  {
+    "id": 63,
+    "timestamp": "2025-04-02T14:10:00Z",
+    "sender": "Rachel",
+    "role": "Physiotherapist",
+    "content": "Excellent. Consistency is key. Remember to log your weights in the app so we can track your progressive overload.",
+    "tags": {
+      "type": "information"
+    }
+  },
+  {
+    "id": 64,
+    "timestamp": "2025-04-05T11:20:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "I have a question for Carla. I've seen oatmeal recommended for heart health, but I've also heard it can spike blood sugar. What's the correct way to eat it, given my goals?",
+    "tags": {
+      "type": "reason",
+      "linked_id": 65
+    }
+  },
+  {
+    "id": 65,
+    "timestamp": "2025-04-05T11:45:00Z",
+    "sender": "Carla",
+    "role": "Nutritionist",
+    "content": "A great and common question. You're right on both counts. Plain oatmeal can spike glucose. The key is to never eat a carbohydrate source alone. If you have oatmeal, add a scoop of protein powder and a tablespoon of almond butter. The protein and fat will blunt the glucose response, making it a much more metabolically healthy meal.",
+    "tags": {
+      "type": "decision",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 66,
+    "timestamp": "2025-04-08T10:00:00Z",
+    "sender": "Rachel",
+    "role": "Physiotherapist",
+    "content": "Hi Rohan. I've been analyzing your workout logs and travel schedule. A recurring theme is stiffness from prolonged sitting on flights. To address this proactively and to better prepare your body for lifting, I'm introducing a new experiment into your plan.",
+    "tags": {
+      "type": "reason",
+      "linked_id": 68
+    }
+  },
+  {
+    "id": 67,
+    "timestamp": "2025-04-08T10:05:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "What's the experiment?",
+    "tags": {
+      "type": "question"
+    }
+  },
+  {
+    "id": 68,
+    "timestamp": "2025-04-08T10:10:00Z",
+    "sender": "Rachel",
+    "role": "Physiotherapist",
+    "content": "I've designed a 15-minute \"Pre-Workout Activation and Mobility\" routine. It focuses on opening your hips and activating your glutes and core. The hypothesis is that performing this before each workout will improve your lifting form, reduce injury risk, and help counteract the effects of travel. It's now in your app as part of your bi-weekly plan update.",
+    "tags": {
+      "type": "decision",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 69,
+    "timestamp": "2025-04-08T10:11:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "Understood. If it helps my performance, I'll do it.",
+    "tags": {
+      "type": "confirmation"
+    }
+  },
+  {
+    "id": 70,
+    "timestamp": "2025-04-12T13:00:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "Did the new mobility routine before my workout. I definitely felt a better connection with my muscles during the squats.",
+    "tags": {
+      "type": "reason",
+      "linked_id": 71
+    }
+  },
+  {
+    "id": 71,
+    "timestamp": "2025-04-12T13:15:00Z",
+    "sender": "Rachel",
+    "role": "Physiotherapist",
+    "content": "That's the goal. It's an excellent early signal that the activation is working as intended. Let's keep it consistent.",
+    "tags": {
+      "type": "milestone",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 72,
+    "timestamp": "2025-04-16T15:00:00Z",
+    "sender": "Sarah Tan",
+    "role": "Personal Assistant",
+    "content": "Hi team, flagging that Rohan has a trip to South Korea for 6 days, leaving on the 21st.",
+    "tags": {
+      "type": "information"
+    }
+  },
+  {
+    "id": 73,
+    "timestamp": "2025-04-16T15:05:00Z",
+    "sender": "Ruby",
+    "role": "Concierge",
+    "content": "Thanks, Sarah. We'll prepare a travel protocol.",
+    "tags": {
+      "type": "decision",
+      "linked_id": 72
+    }
+  },
+  {
+    "id": 74,
+    "timestamp": "2025-04-17T11:00:00Z",
+    "sender": "Carla",
+    "role": "Nutritionist",
+    "content": "Rohan, for your Korea trip, here's a simple nutrition tip to help manage the ApoB goal while eating out: prioritize side dishes like kimchi (fiber, probiotics) and namul (seasoned vegetables) at every meal. They are readily available and very healthy.",
+    "tags": {
+      "type": "plan_update",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 75,
+    "timestamp": "2025-04-17T11:30:00Z",
+    "sender": "Rachel",
+    "role": "Physiotherapist",
+    "content": "The new mobility routine requires no equipment, so you can easily do it in your hotel room before heading to the gym. This will be a good test to see if it helps with post-flight stiffness.",
+    "tags": {
+      "type": "plan_update",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 76,
+    "timestamp": "2025-04-27T08:30:00Z",
+    "sender": "Advik",
+    "role": "Performance Scientist",
+    "content": "Rohan, looking at your data post-Korea trip. Your HRV recovered to baseline a full day earlier than it did after your US trip last month. While it's just one data point, it suggests the targeted mobility work from Rachel may be having a positive impact on your system's ability to handle travel stress.",
+    "tags": {
+      "type": "milestone",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 77,
+    "timestamp": "2025-04-27T09:15:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "Interesting. I did feel less stiff when I landed. The data seems to confirm it. Good.",
+    "tags": {
+      "type": "confirmation"
+    }
+  },
+  {
+    "id": 78,
+    "timestamp": "2025-05-02T10:30:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "Did the mobility work and Zone 2 cardio this morning. Feeling strong and my energy levels have been very consistent this week.",
+    "tags": {
+      "type": "information"
+    }
+  },
+  {
+    "id": 79,
+    "timestamp": "2025-05-02T10:45:00Z",
+    "sender": "Advik",
+    "role": "Performance Scientist",
+    "content": "That's great to hear, Rohan. The data reflects that. Your average Heart Rate Variability (HRV) has trended up by 5% over the last two weeks, which is a solid sign of positive adaptation.",
+    "tags": {
+      "type": "milestone",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 80,
+    "timestamp": "2025-05-06T08:30:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "Woke up feeling awful today. Scratchy throat, headache, and body aches. I have a major presentation on Friday. This is terrible timing.",
+    "tags": {
+      "type": "reason",
+      "linked_id": 82
+    }
+  },
+  {
+    "id": 81,
+    "timestamp": "2025-05-06T08:35:00Z",
+    "sender": "Advik",
+    "role": "Performance Scientist",
+    "content": "I'm looking at your live Whoop data right now. Your Resting Heart Rate is up by 10bpm, your HRV is down by 40%, and your respiratory rate is significantly elevated. Your body is clearly fighting an infection. **Do not exercise today.** I'm flagging Dr. Warren immediately.",
+    "tags": {
+      "type": "reason",
+      "linked_id": 82
+    }
+  },
+  {
+    "id": 82,
+    "timestamp": "2025-05-06T08:40:00Z",
+    "sender": "Dr. Warren",
+    "role": "Medical Strategist",
+    "content": "Rohan, I agree with Advik. The data confirms a significant immune response, likely a viral infection. We are initiating the **Elyx Sick Day Protocol** right now. Pushing through to your presentation is not an option; your cognitive performance will be impaired, and you risk a much longer recovery.",
+    "tags": {
+      "type": "decision",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 83,
+    "timestamp": "2025-05-06T08:42:00Z",
+    "sender": "Ruby",
+    "role": "Concierge",
+    "content": "Rohan, I'm so sorry to hear you're unwell. I've just sent the Sick Day Protocol to your phone. I am also arranging for a delivery of recommended soups and electrolyte beverages, which will arrive within 90 minutes. Do you need us to provide a formal medical letter to your office to postpone the presentation?",
+    "tags": {
+      "type": "plan_update",
+      "linked_id": 82
+    }
+  },
+  {
+    "id": 84,
+    "timestamp": "2025-05-06T09:15:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "Yes, please send the medical letter to Sarah. This is a major setback. I feel like all the progress is being undone.",
+    "tags": {
+      "type": "friction_point",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 85,
+    "timestamp": "2025-05-06T09:25:00Z",
+    "sender": "Neel",
+    "role": "Concierge Lead",
+    "content": "Rohan, Neel here. I understand your frustration completely. But right now, the highest leverage activity for a successful presentation next week is **radical rest today**. Think of this as an unscheduled stress test for your system. We'll manage your health so you can focus entirely on recovery.",
+    "tags": {
+      "type": "information"
+    }
+  },
+  {
+    "id": 86,
+    "timestamp": "2025-05-07T09:00:00Z",
+    "sender": "Advik",
+    "role": "Performance Scientist",
+    "content": "Good morning. Checking in. Your recovery score today is at 1%. This is expected and validates that canceling your engagements was the correct decision. Your body is using all its energy to fight. How are you feeling symptomatically?",
+    "tags": {
+      "type": "information"
+    }
+  },
+  {
+    "id": 87,
+    "timestamp": "2025-05-07T09:45:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "About the same. No energy.",
+    "tags": {
+      "type": "information"
+    }
+  },
+  {
+    "id": 88,
+    "timestamp": "2025-05-08T11:00:00Z",
+    "sender": "Carla",
+    "role": "Nutritionist",
+    "content": "Hi Rohan. For today, don't worry about meals. Focus on hydration with the electrolytes we sent. The bone broth is for minerals and hydration. Your body needs to divert energy away from digestion and toward the immune response.",
+    "tags": {
+      "type": "plan_update",
+      "linked_id": 82
+    }
+  },
+  {
+    "id": 89,
+    "timestamp": "2025-05-09T08:30:00Z",
+    "sender": "Advik",
+    "role": "Performance Scientist",
+    "content": "Rohan, we have the first positive sign in your data. Your RHR has dropped by 3bpm overnight. It's the first objective signal that you've turned a corner. This will likely precede you feeling subjectively better.",
+    "tags": {
+      "type": "milestone",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 90,
+    "timestamp": "2025-05-10T10:00:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "I do feel slightly better today. Less foggy.",
+    "tags": {
+      "type": "information"
+    }
+  },
+  {
+    "id": 91,
+    "timestamp": "2025-05-12T14:00:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "I'm feeling about 70% better. Can I do a light workout? I'm getting restless.",
+    "tags": {
+      "type": "reason",
+      "linked_id": 92
+    }
+  },
+  {
+    "id": 92,
+    "timestamp": "2025-05-12T14:10:00Z",
+    "sender": "Dr. Warren",
+    "role": "Medical Strategist",
+    "content": "It's great that you're feeling better, but this is the highest risk phase for a relapse. Your recovery is still in the red. We strongly advise against any formal exercise. A 15-minute slow walk outside is the maximum stimulus your body can handle right now.",
+    "tags": {
+      "type": "decision",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 93,
+    "timestamp": "2025-05-14T09:00:00Z",
+    "sender": "Advik",
+    "role": "Performance Scientist",
+    "content": "Your recovery has been in the yellow for two consecutive days. Today, we can officially restart the exercise protocol, but at a reduced capacity. Let's begin with just the 15-minute mobility routine from Rachel. Nothing else.",
+    "tags": {
+      "type": "plan_update",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 94,
+    "timestamp": "2025-05-15T11:30:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "Mobility routine done. Felt okay.",
+    "tags": {
+      "type": "confirmation"
+    }
+  },
+  {
+    "id": 95,
+    "timestamp": "2025-05-16T09:00:00Z",
+    "sender": "Advik",
+    "role": "Performance Scientist",
+    "content": "Perfect. Your recovery is green today. Your system handled that well. We can now progress. Today's plan: the 15-minute mobility routine plus a 20-minute Zone 2 walk.",
+    "tags": {
+      "type": "plan_update",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 96,
+    "timestamp": "2025-05-26T16:00:00Z",
+    "sender": "Neel",
+    "role": "Concierge Lead",
+    "content": "Rohan, closing out the month. I know it feels like a wash, but from our perspective, it was valuable. We learned how your body responds to acute illness, how to manage it aggressively with data, and how to structure your return to training safely. This experience makes your overall plan more robust for the future.",
+    "tags": {
+      "type": "milestone",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 97,
+    "timestamp": "2025-06-02T09:30:00Z",
+    "sender": "Advik",
+    "role": "Performance Scientist",
+    "content": "Good morning, Rohan. Your Whoop data has been consistently in the green for a full week. Your system is fully recovered. Today, we'll progress your Zone 2 cardio session back to 35 minutes. Let's rebuild that aerobic base.",
+    "tags": {
+      "type": "plan_update",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 98,
+    "timestamp": "2025-06-02T09:31:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "Good to hear. The 30-minute sessions have felt easy. Ready to move up.",
+    "tags": {
+      "type": "confirmation"
+    }
+  },
+  {
+    "id": 99,
+    "timestamp": "2025-06-04T11:00:00Z",
+    "sender": "Carla",
+    "role": "Nutritionist",
+    "content": "Hi Rohan. Now that your training is stable, I'd like to propose our next nutritional experiment to support your metabolic health and ApoB goals. It's called Time-Restricted Eating, or TRE.",
+    "tags": {
+      "type": "decision",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 100,
+    "timestamp": "2025-06-04T11:05:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "I've heard of it. What's the protocol?",
+    "tags": {
+      "type": "question"
+    }
+  },
+  {
+    "id": 101,
+    "timestamp": "2025-06-04T11:10:00Z",
+    "sender": "Carla",
+    "role": "Nutritionist",
+    "content": "We'll start simply. For the next two weeks, we'll aim for a 10-hour eating window. If your first meal is at 9 AM, your last bite of food would be at 7 PM. This can improve insulin sensitivity and cellular repair. It's not about *what* you eat, but *when*.",
+    "tags": {
+      "type": "plan_update",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 102,
+    "timestamp": "2025-06-04T11:11:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "That seems manageable. I can try that.",
+    "tags": {
+      "type": "confirmation"
+    }
+  },
+  {
+    "id": 103,
+    "timestamp": "2025-06-06T08:30:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "My deep sleep was low last night according to Whoop. I did stick to the 10-hour eating window, though.",
+    "tags": {
+      "type": "reason",
+      "linked_id": 104
+    }
+  },
+  {
+    "id": 104,
+    "timestamp": "2025-06-06T08:40:00Z",
+    "sender": "Advik",
+    "role": "Performance Scientist",
+    "content": "I see that. Looking at your Whoop journal, you noted \"Work Stress.\" This is a great example of how psychological stress from your nervous system can disrupt sleep architecture, even when your nutrition is on point.",
+    "tags": {
+      "type": "information"
+    }
+  },
+  {
+    "id": 105,
+    "timestamp": "2025-06-10T14:00:00Z",
+    "sender": "Rachel",
+    "role": "Physiotherapist",
+    "content": "Rohan, with your autonomic function stable again, it's time to graduate from the foundational plan to a structured strength program. This is the engine for improving body composition and long-term metabolic health.",
+    "tags": {
+      "type": "decision",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 106,
+    "timestamp": "2025-06-10T14:05:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "What does that involve?",
+    "tags": {
+      "type": "question"
+    }
+  },
+  {
+    "id": 107,
+    "timestamp": "2025-06-10T14:10:00Z",
+    "sender": "Rachel",
+    "role": "Physiotherapist",
+    "content": "I've designed a 4-day/week program based on key compound lifts. To ensure safety and effectiveness, I need to book a 90-minute in-person session with you at your home gym to walk through the form for each lift.",
+    "tags": {
+      "type": "plan_update",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 108,
+    "timestamp": "2025-06-10T14:11:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "Okay. Ruby, please coordinate with Sarah to schedule it.",
+    "tags": {
+      "type": "confirmation"
+    }
+  },
+  {
+    "id": 109,
+    "timestamp": "2025-06-10T14:12:00Z",
+    "sender": "Ruby",
+    "role": "Concierge",
+    "content": "On it. I'll reach out to Sarah to find a time next week.",
+    "tags": {
+      "type": "internal_metric",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 110,
+    "timestamp": "2025-06-12T11:30:00Z",
+    "sender": "Advik",
+    "role": "Performance Scientist",
+    "content": "Hi Rohan. I was doing a deep dive on your data, looking for hidden patterns. I've found a very consistent one: your deep sleep duration is 20-30% lower on the nights following days you have late-afternoon Zoom calls that run past 5 PM.",
+    "tags": {
+      "type": "reason",
+      "linked_id": 112
+    }
+  },
+  {
+    "id": 111,
+    "timestamp": "2025-06-12T11:32:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "That's interesting. I hadn't made that connection, but I do feel more \"wired\" on those evenings. What's the hypothesis?",
+    "tags": {
+      "type": "question"
+    }
+  },
+  {
+    "id": 112,
+    "timestamp": "2025-06-12T11:38:00Z",
+    "sender": "Advik",
+    "role": "Performance Scientist",
+    "content": "The hypothesis is a combination of prolonged blue light exposure from the screen suppressing melatonin, and sustained cognitive load too close to your wind-down period. **Intervention:** We're sending you a pair of high-quality blue-light blocking glasses to wear for any screen use after 4 PM. Let's see if this one change improves your deep sleep on those specific days.",
+    "tags": {
+      "type": "decision",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 113,
+    "timestamp": "2025-06-12T11:40:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "Okay, let's try it. This is the kind of proactive analysis I was looking for.",
+    "tags": {
+      "type": "confirmation"
+    }
+  },
+  {
+    "id": 114,
+    "timestamp": "2025-06-17T15:30:00Z",
+    "sender": "Rachel",
+    "role": "Physiotherapist",
+    "content": "Great session today, Rohan! Your form on the foundational lifts is solid. I've uploaded the full Phase 1 Strength Program to your app with the specific weights we established. Remember, for this first phase, the focus is on perfect form.",
+    "tags": {
+      "type": "plan_update",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 115,
+    "timestamp": "2025-06-18T08:30:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "Wore the blue-light glasses last night during a late work session. My deep sleep was 1h 25m, a record for me on a workday.",
+    "tags": {
+      "type": "reason",
+      "linked_id": 116
+    }
+  },
+  {
+    "id": 116,
+    "timestamp": "2025-06-18T08:40:00Z",
+    "sender": "Advik",
+    "role": "Performance Scientist",
+    "content": "This is a massive win and a perfect example of a successful intervention. We identified a hidden stressor with data and deployed a simple, targeted solution that worked.",
+    "tags": {
+      "type": "milestone",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 117,
+    "timestamp": "2025-06-25T11:00:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "To be successful with these nutritional changes long-term, your team probably needs to talk to my personal cook, Javier. He handles most of our family's evening meals.",
+    "tags": {
+      "type": "reason",
+      "linked_id": 118
+    }
+  },
+  {
+    "id": 118,
+    "timestamp": "2025-06-25T11:02:00Z",
+    "sender": "Ruby",
+    "role": "Concierge",
+    "content": "That would be incredibly helpful and is a service we're happy to provide. It allows us to integrate the plan seamlessly into your life. Would you prefer Carla to connect with him via email?",
+    "tags": {
+      "type": "decision",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 119,
+    "timestamp": "2025-06-25T11:03:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "Yes, email is better. Sarah can provide his contact details.",
+    "tags": {
+      "type": "confirmation"
+    }
+  },
+  {
+    "id": 120,
+    "timestamp": "2025-06-28T13:00:00Z",
+    "sender": "Carla",
+    "role": "Nutritionist",
+    "content": "Hi Rohan, I've had a wonderful initial email exchange with Javier. He's very receptive. I've sent him a detailed guide on your nutritional goals for lowering ApoB: focus on monounsaturated fats, increasing fiber, and using olive oil. He will send me his menu plan for next week to review.",
+    "tags": {
+      "type": "milestone",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 121,
+    "timestamp": "2025-06-28T13:05:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "Excellent. This is the integration I need.",
+    "tags": {
+      "type": "confirmation"
+    }
+  },
+  {
+    "id": 122,
+    "timestamp": "2025-07-01T09:00:00Z",
+    "sender": "Ruby",
+    "role": "Concierge",
+    "content": "Good morning, Rohan. A reminder that your Q2 progress review call with Neel and Dr. Warren is scheduled for this Friday. The primary topic is the analysis of your progress on ApoB and setting goals for Q3.",
+    "tags": {
+      "type": "internal_metric",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 123,
+    "timestamp": "2025-07-01T09:01:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "Confirmed. I have questions ready.",
+    "tags": {
+      "type": "confirmation"
+    }
+  },
+  {
+    "id": 124,
+    "timestamp": "2025-07-02T11:30:00Z",
+    "sender": "Advik",
+    "role": "Performance Scientist",
+    "content": "Rohan, your Zone 2 cardio base is now very solid. This quarter, we're going to introduce a new stimulus to improve your VO2 max, a key predictor of longevity. We will now replace one cardio session per week with a Zone 5 interval session. The protocol is in your app.",
+    "tags": {
+      "type": "plan_update",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 125,
+    "timestamp": "2025-07-02T11:35:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "Zone 5 is max effort, correct? How is this different from the high-intensity minutes my Garmin used to log randomly?",
+    "tags": {
+      "type": "question"
+    }
+  },
+  {
+    "id": 126,
+    "timestamp": "2025-07-02T11:40:00Z",
+    "sender": "Advik",
+    "role": "Performance Scientist",
+    "content": "Excellent question. The Garmin logged uncontrolled, symptomatic high heart rate. This is a controlled, intentional, and minimal effective dose of high intensity prescribed to elicit a specific adaptation—improving the efficiency of your mitochondria.",
+    "tags": {
+      "type": "information"
+    }
+  },
+  {
+    "id": 127,
+    "timestamp": "2025-07-05T16:15:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "Team, heads up. Unexpected trip to Tokyo next week for 5 days. This will be a major test for all systems. Let's get the travel protocol actioned.",
+    "tags": {
+      "type": "reason",
+      "linked_id": 128
+    }
+  },
+  {
+    "id": 128,
+    "timestamp": "2025-07-05T16:20:00Z",
+    "sender": "Ruby",
+    "role": "Concierge",
+    "content": "Understood. We're on it. The protocol will be built for this specific trip length and time zone shift. Rachel, what do you need for the gym?",
+    "tags": {
+      "type": "decision",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 129,
+    "timestamp": "2025-07-05T16:25:00Z",
+    "sender": "Rachel",
+    "role": "Physiotherapist",
+    "content": "I'll need his hotel details to find a nearby gym with proper equipment for his strength program.",
+    "tags": {
+      "type": "question"
+    }
+  },
+  {
+    "id": 130,
+    "timestamp": "2025-07-05T16:26:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "Park Hyatt Tokyo.",
+    "tags": {
+      "type": "information"
+    }
+  },
+  {
+    "id": 131,
+    "timestamp": "2025-07-06T11:00:00Z",
+    "sender": "Rachel",
+    "role": "Physiotherapist",
+    "content": "Update: I've vetted three gyms. \"Club 360\" in Roppongi is the best fit. It has the exact equipment you need. We can arrange a pass.",
+    "tags": {
+      "type": "decision",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 132,
+    "timestamp": "2025-07-06T11:01:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "Good work. Arrange it.",
+    "tags": {
+      "type": "confirmation"
+    }
+  },
+  {
+    "id": 133,
+    "timestamp": "2025-07-10T13:00:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "I'm trying to increase my fiber intake as per Carla's plan, but I'm experiencing bloating after meals with lentils or chickpeas.",
+    "tags": {
+      "type": "reason",
+      "linked_id": 134
+    }
+  },
+  {
+    "id": 134,
+    "timestamp": "2025-07-10T13:05:00Z",
+    "sender": "Carla",
+    "role": "Nutritionist",
+    "content": "Not uncommon. Experiment: I'll ask Javier to soak all legumes overnight before cooking. This process can break down the compounds that cause gas. We will monitor your symptoms.",
+    "tags": {
+      "type": "decision",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 135,
+    "timestamp": "2025-07-14T08:00:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "(From Tokyo) Landed. I feel functional. The gym pass was waiting for me. Everything was seamless.",
+    "tags": {
+      "type": "milestone",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 136,
+    "timestamp": "2025-07-14T08:05:00Z",
+    "sender": "Ruby",
+    "role": "Concierge",
+    "content": "Glad to hear the logistics were smooth.",
+    "tags": {
+      "type": "information"
+    }
+  },
+  {
+    "id": 137,
+    "timestamp": "2025-07-16T15:00:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "I had sushi for lunch. My new CGM sensor shows a huge glucose spike, up to 180. I thought rice was okay.",
+    "tags": {
+      "type": "reason",
+      "linked_id": 138
+    }
+  },
+  {
+    "id": 138,
+    "timestamp": "2025-07-16T15:10:00Z",
+    "sender": "Carla",
+    "role": "Nutritionist",
+    "content": "This is valuable data. Sushi rice often contains sugar and is a rapid carbohydrate. **Experiment:** Next time, start the meal with edamame (fiber/protein) and have a piece of fatty tuna (fat/protein) with each piece of rice. We will then compare the glucose curves.",
+    "tags": {
+      "type": "decision",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 139,
+    "timestamp": "2025-07-17T13:00:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "Tried the sushi experiment. Glucose peak was only 140 this time, and the curve was much gentler. This is powerful.",
+    "tags": {
+      "type": "reason",
+      "linked_id": 140
+    }
+  },
+  {
+    "id": 140,
+    "timestamp": "2025-07-17T13:05:00Z",
+    "sender": "Carla",
+    "role": "Nutritionist",
+    "content": "This is the core of personalized nutrition. You've just learned a rule for *your* body: always pair carbohydrates with fiber, fat, and protein to manage the glycemic response.",
+    "tags": {
+      "type": "milestone",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 141,
+    "timestamp": "2025-07-26T13:00:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "I've been thinking... I've noticed a strange metallic taste some mornings. I live in an older home. Could this be related to my water pipes? What's your view on environmental testing?",
+    "tags": {
+      "type": "reason",
+      "linked_id": 142
+    }
+  },
+  {
+    "id": 142,
+    "timestamp": "2025-07-26T13:05:00Z",
+    "sender": "Ruby",
+    "role": "Concierge",
+    "content": "That's a valid question. Investigating environmental factors is a logical next step. We can arrange for a third-party environmental testing company to perform a comprehensive water quality analysis at your residence for heavy metals.",
+    "tags": {
+      "type": "decision",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 143,
+    "timestamp": "2025-07-26T13:06:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "Yes, please arrange that.",
+    "tags": {
+      "type": "confirmation"
+    }
+  },
+  {
+    "id": 144,
+    "timestamp": "2025-07-29T14:00:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "On a related note, I've been reading about proactive cancer screening. What is your clinical stance on a full-body MRI?",
+    "tags": {
+      "type": "reason",
+      "linked_id": 145
+    }
+  },
+  {
+    "id": 145,
+    "timestamp": "2025-07-29T14:15:00Z",
+    "sender": "Dr. Warren",
+    "role": "Medical Strategist",
+    "content": "Rohan, this is a key topic in proactive health. For clients focused on longevity, we often recommend a full-body MRI scan, like one from Prenuvo, as a radiation-free baseline screening tool for solid tumors. It is a part of a comprehensive strategy for early detection, and we endorse it.",
+    "tags": {
+      "type": "decision",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 146,
+    "timestamp": "2025-07-29T14:18:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "Look into it. Find the best facility and book it for sometime in the next quarter.",
+    "tags": {
+      "type": "confirmation"
+    }
+  },
+  {
+    "id": 147,
+    "timestamp": "2025-08-01T09:00:00Z",
+    "sender": "Ruby",
+    "role": "Concierge",
+    "content": "Good morning, Rohan. Following up on your requests from last month:\n* **MRI:** We've researched the full-body MRI options. The Prenuvo clinic has the best availability. We can book a slot for you in late September.\n* **Water Testing:** The environmental lab is confirmed to visit your residence for sample collection next Thursday.",
+    "tags": {
+      "type": "plan_update",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 148,
+    "timestamp": "2025-08-01T09:02:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "Book both. Have Sarah coordinate the specific times.",
+    "tags": {
+      "type": "confirmation"
+    }
+  },
+  {
+    "id": 149,
+    "timestamp": "2025-08-04T11:00:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "My legs are significantly sore from Rachel's new strength program. It's affecting my focus at work.",
+    "tags": {
+      "type": "reason",
+      "linked_id": 152
+    }
+  },
+  {
+    "id": 150,
+    "timestamp": "2025-08-04T11:05:00Z",
+    "sender": "Rachel",
+    "role": "Physiotherapist",
+    "content": "This level of soreness (DOMS) is expected in the first 1-2 weeks of a new stimulus. It's a sign of effective muscle fiber recruitment.",
+    "tags": {
+      "type": "information"
+    }
+  },
+  {
+    "id": 151,
+    "timestamp": "2025-08-04T11:10:00Z",
+    "sender": "Advik",
+    "role": "Performance Scientist",
+    "content": "I'm looking at your Whoop data. The muscle soreness is showing up as a higher RHR and lower HRV, leading to a yellow recovery score. Your body is correctly identifying the muscular repair as a physiological stressor. Today should be a complete rest day. No cardio.",
+    "tags": {
+      "type": "decision",
+      "linked_id": 149
+    }
+  },
+  {
+    "id": 152,
+    "timestamp": "2025-08-04T11:15:00Z",
+    "sender": "Carla",
+    "role": "Nutritionist",
+    "content": "We can address the recovery speed. **Experiment:** After your next strength session, consume a protein shake with 30g of whey protein and 5g of creatine within 60 minutes. We will monitor your next-day soreness and recovery score to see if this accelerates repair.",
+    "tags": {
+      "type": "decision",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 153,
+    "timestamp": "2025-08-07T08:30:00Z",
+    "sender": "Advik",
+    "role": "Performance Scientist",
+    "content": "The data from that experiment is interesting. Your recovery score today is 72% (Green), significantly better than after your last strength session. How do your legs feel?",
+    "tags": {
+      "type": "reason",
+      "linked_id": 154
+    }
+  },
+  {
+    "id": 154,
+    "timestamp": "2025-08-07T08:31:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "Noticeably less sore. Maybe 50% better. The protocol works.",
+    "tags": {
+      "type": "milestone",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 155,
+    "timestamp": "2025-08-08T09:20:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "I have an issue. My wrist is developing a rash under the Whoop strap. It's irritating.",
+    "tags": {
+      "type": "friction_point",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 156,
+    "timestamp": "2025-08-08T09:25:00Z",
+    "sender": "Ruby",
+    "role": "Concierge",
+    "content": "Understood. This can happen due to moisture. I am overnighting you a set of different strap materials—a breathable ProKnit band. It will arrive tomorrow. In the meantime, please switch the device to your other wrist.",
+    "tags": {
+      "type": "decision",
+      "linked_id": 155
+    }
+  },
+  {
+    "id": 157,
+    "timestamp": "2025-08-12T10:30:00Z",
+    "sender": "Rachel",
+    "role": "Physiotherapist",
+    "content": "Rohan, now that you're adapting to the strength program, I want to formalize the long-term goals for your structural health, based on principles of longevity. I propose these goals for the next 12-24 months:\n* **Strength:** Deadlift 1.5x your bodyweight for 1 rep.\n* **Cardio:** Improve VO2 Max to the top 10% for your age group.\n* **Stability:** Be able to do a single-leg stand with eyes closed for 30 seconds.",
+    "tags": {
+      "type": "plan_update",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 158,
+    "timestamp": "2025-08-12T10:35:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "These are clear, measurable targets. I like it. What do we need to do to track progress?",
+    "tags": {
+      "type": "reason",
+      "linked_id": 159
+    }
+  },
+  {
+    "id": 159,
+    "timestamp": "2025-08-12T10:40:00Z",
+    "sender": "Rachel",
+    "role": "Physiotherapist",
+    "content": "We need two baseline tests: a VO2 max test on a treadmill and a DEXA scan to get a precise measure of your body composition and bone density.",
+    "tags": {
+      "type": "decision",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 160,
+    "timestamp": "2025-08-12T10:41:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "Ruby, schedule them.",
+    "tags": {
+      "type": "confirmation"
+    }
+  },
+  {
+    "id": 161,
+    "timestamp": "2025-08-14T15:00:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "I have to give a keynote speech next month. I need my cognition to be at its absolute peak. What can we do?",
+    "tags": {
+      "type": "reason",
+      "linked_id": 162
+    }
+  },
+  {
+    "id": 162,
+    "timestamp": "2025-08-14T15:05:00Z",
+    "sender": "Neel",
+    "role": "Concierge Lead",
+    "content": "We can design a \"Keynote Peak Performance Protocol\" for the 7 days leading up to it, integrating strategies from all pillars, from nutrition for neurotransmitter production to stress inoculation techniques.",
+    "tags": {
+      "type": "decision",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 163,
+    "timestamp": "2025-08-18T15:20:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "I've been thinking about my long-term cognitive health. I've read that learning a new, complex skill is one of the best ways to build cognitive reserve. I've always wanted to learn piano. From a health perspective, is this a worthwhile use of my time?",
+    "tags": {
+      "type": "reason",
+      "linked_id": 164
+    }
+  },
+  {
+    "id": 164,
+    "timestamp": "2025-08-18T15:40:00Z",
+    "sender": "Dr. Warren",
+    "role": "Medical Strategist",
+    "content": "From a medical standpoint, it's an excellent intervention for cognitive longevity. It engages multiple domains of the brain simultaneously—auditory processing, motor skills, memory, and emotion. The discipline it requires is also a form of structured mindfulness. We fully endorse this as a component of your long-term health plan.",
+    "tags": {
+      "type": "decision",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 165,
+    "timestamp": "2025-08-18T15:41:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "Okay. I'm going to pursue this.",
+    "tags": {
+      "type": "milestone",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 166,
+    "timestamp": "2025-08-21T14:30:00Z",
+    "sender": "Ruby",
+    "role": "Concierge",
+    "content": "The preliminary results from the water quality test are in. No heavy metals detected, which is excellent. The full report will be ready next week.",
+    "tags": {
+      "type": "milestone",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 167,
+    "timestamp": "2025-08-29T17:00:00Z",
+    "sender": "Advik",
+    "role": "Performance Scientist",
+    "content": "Closing out the month, I want to highlight a trend. Your resting heart rate has shown a steady downward trend, now averaging 5 bpm lower than when we started, even with the new, intense strength training. This is a powerful indicator that your cardiovascular system is becoming much more efficient and resilient.",
+    "tags": {
+      "type": "milestone",
+      "linked_id": null
+    }
+  },
+  {
+    "id": 168,
+    "timestamp": "2025-08-29T17:05:00Z",
+    "sender": "Rohan Patel",
+    "role": "Member",
+    "content": "Good. Let's keep pushing that number down.",
+    "tags": {
+      "type": "confirmation"
+    }
+  }
+]
