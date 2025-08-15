@@ -16,104 +16,142 @@
         /* Custom Styles */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #111827;
-            color: #d1d5db;
+            background-color: #f9fafb; /* Softer off-white background (gray-50) */
+            color: #334155; /* Slate gray text */
         }
         ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #1f2937; }
-        ::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #6b7280; }
+        ::-webkit-scrollbar-track { background: #e2e8f0; }
+        ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
         
-        .highlight-decision { transition: all 0.3s ease; box-shadow: 0 0 15px 2px rgba(59, 130, 246, 0.6); border: 1px solid rgba(59, 130, 246, 0.8); }
-        .highlight-reason { transition: all 0.3s ease; box-shadow: 0 0 15px 2px rgba(16, 185, 129, 0.6); border: 1px solid rgba(16, 185, 129, 0.8); }
-        .decision-bubble { cursor: pointer; border: 1px solid #4f46e5; transition: background-color 0.2s ease-in-out; }
-        .decision-bubble:hover { background-color: #4338ca; }
+        .highlight-decision { transition: all 0.3s ease; box-shadow: 0 0 15px 2px rgba(79, 70, 229, 0.6); border: 1px solid rgba(79, 70, 229, 0.8); }
+        .highlight-reason { transition: all 0.3s ease; box-shadow: 0 0 15px 2px rgba(5, 150, 105, 0.6); border: 1px solid rgba(5, 150, 105, 0.8); }
+        .decision-bubble { cursor: pointer; border: 1px solid #6366f1; transition: background-color 0.2s ease-in-out; }
+        .decision-bubble:hover { background-color: #4f46e5; color: white; }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .message-bubble { animation: fadeIn 0.3s ease-out forwards; }
+        .page-content { animation: fadeIn 0.5s ease-out forwards; }
 
         /* Modal Styles */
         .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(5px); }
-        .modal-content { background-color: #1f2937; margin: 10% auto; padding: 2rem; border: 1px solid #4b5563; width: 80%; max-width: 600px; border-radius: 0.75rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5); }
-        .modal-close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
-        .modal-close:hover, .modal-close:focus { color: #fff; text-decoration: none; }
+        .modal-content { background-color: #ffffff; margin: 10% auto; padding: 2rem; border: 1px solid #d1d5db; width: 80%; max-width: 600px; border-radius: 0.75rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5); }
+        .modal-close { color: #9ca3af; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .modal-close:hover, .modal-close:focus { color: #111827; text-decoration: none; }
 
         /* Chat Agent Styles */
-        #chat-agent-window { display: none; position: absolute; bottom: 80px; right: 1.5rem; width: 350px; height: 450px; background-color: #1f2937; border: 1px solid #4b5563; border-radius: 0.75rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5); transition: all 0.3s ease; }
+        #chat-agent-window { display: none; position: absolute; bottom: 80px; right: 1.5rem; width: 350px; height: 450px; background-color: #ffffff; border: 1px solid #d1d5db; border-radius: 0.75rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5); transition: all 0.3s ease; }
+        
+        /* Tab Navigation Styles */
+        .nav-btn {
+            padding: 0.75rem 1rem;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            color: #e2e8f0;
+            font-weight: 500;
+        }
+        .nav-btn.active {
+            border-bottom-color: #ffffff;
+            color: #ffffff;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body class="antialiased">
 
     <div class="flex flex-col h-screen">
         <!-- Header -->
-        <header class="bg-gray-900/70 backdrop-blur-sm border-b border-gray-700 p-4 shadow-lg z-10">
-            <div class="max-w-7xl mx-auto flex justify-between items-center">
-                <div>
-                    <h1 class="text-2xl font-bold text-white">Elyx Member Journey</h1>
-                    <p class="text-sm text-gray-400">Visualizing the 8-Month Journey of Rohan Patel</p>
+        <header class="bg-slate-800 p-4 shadow-md z-10">
+            <div class="max-w-7xl mx-auto">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h1 class="text-2xl font-bold text-white">Elyx Member Dashboard</h1>
+                        <p class="text-sm text-slate-300">Rohan Patel</p>
+                    </div>
+                    <div id="api-status" class="flex items-center space-x-2">
+                        <span class="text-sm font-medium text-slate-300">API Status:</span>
+                        <div id="api-indicator" class="w-3 h-3 rounded-full bg-yellow-400 animate-pulse"></div>
+                    </div>
                 </div>
-                <div id="api-status" class="flex items-center space-x-2">
-                    <span class="text-sm font-medium text-gray-400">API Status:</span>
-                    <div id="api-indicator" class="w-3 h-3 rounded-full bg-yellow-500 animate-pulse"></div>
-                </div>
+                <!-- Navigation Tabs -->
+                <nav class="mt-4">
+                    <div class="flex space-x-2">
+                        <button class="nav-btn active" data-page="home">Home</button>
+                        <button class="nav-btn" data-page="journey">Journey</button>
+                        <button class="nav-btn" data-page="status">Health Status</button>
+                        <button class="nav-btn" data-page="profile">Profile</button>
+                    </div>
+                </nav>
             </div>
         </header>
 
-        <!-- Main Content -->
-        <main class="flex-1 flex overflow-hidden">
-            <!-- Left Panel: Timeline -->
-            <aside class="w-1/3 lg:w-1/4 bg-gray-900/50 border-r border-gray-700 overflow-y-auto p-6">
-                <h2 class="text-lg font-semibold text-white mb-4">Journey Timeline</h2>
-                <div id="timeline-container" class="relative border-l-2 border-gray-600 pl-6 space-y-8">
-                    <div class="text-center text-gray-400">Loading timeline...</div>
+        <!-- Main Content Area -->
+        <div class="flex-1 overflow-y-auto">
+            <!-- Home Page -->
+            <main id="page-home" class="page-content p-8">
+                <h1 class="text-4xl font-bold text-slate-900">Welcome, Rohan!</h1>
+                <p class="text-lg text-slate-600 mt-1">This is your personalized health dashboard. Here, you'll find an overview of your progress, key metrics, and upcoming activities.</p>
+                <div id="home-container" class="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Home page cards will be injected here -->
                 </div>
-            </aside>
+            </main>
 
-            <!-- Center Panel: Conversation -->
-            <section class="flex-1 flex flex-col bg-gray-800 relative">
-                <div class="border-b border-gray-700 p-4 space-y-3">
-                    <h2 id="conversation-title" class="text-lg font-semibold text-white">Full Conversation</h2>
-                    <div id="filter-container" class="flex flex-wrap gap-2"></div>
-                </div>
-                <div id="conversation-container" class="flex-1 overflow-y-auto p-6 space-y-4">
-                    <div class="text-center text-gray-400">Loading conversation...</div>
-                </div>
-                <!-- Chat Agent Button -->
-                <div class="p-4 border-t border-gray-700">
-                     <button id="chat-agent-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg flex items-center justify-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.839 8.839 0 01-4.082-.982L1 18l1.982-4.918A8.966 8.966 0 011 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM4.415 14.182A7.003 7.003 0 0010 15a7 7 0 100-14 7.003 7.003 0 00-5.585 2.818" clip-rule="evenodd" /></svg>
-                        Ask Elyx AI
-                    </button>
-                </div>
-                <!-- Chat Agent Window -->
-                <div id="chat-agent-window" class="flex flex-col">
-                    <div class="p-3 bg-gray-700 rounded-t-lg flex justify-between items-center">
-                        <h3 class="text-md font-semibold text-white">Elyx AI Assistant</h3>
-                        <button id="chat-close-btn" class="text-gray-300 hover:text-white">&times;</button>
+            <!-- Journey Page -->
+            <main id="page-journey" class="page-content hidden h-full flex">
+                <aside class="w-1/3 lg:w-1/4 bg-white border-r border-slate-200 overflow-y-auto p-6">
+                    <h2 class="text-lg font-semibold text-gray-900 mb-4">Journey Timeline</h2>
+                    <div id="timeline-container" class="relative border-l-2 border-slate-300 pl-6 space-y-8"></div>
+                </aside>
+                <section class="flex-1 flex flex-col bg-slate-100 relative">
+                    <div class="border-b border-slate-200 p-4 space-y-3">
+                        <h2 id="conversation-title" class="text-lg font-semibold text-gray-900">Full Conversation</h2>
+                        <div id="filter-container" class="flex flex-wrap gap-2"></div>
                     </div>
-                    <div id="chat-messages" class="flex-1 p-3 overflow-y-auto space-y-3">
-                        <div class="p-2 bg-indigo-500/50 rounded-lg text-sm">Hi! Ask me why a decision was made. For example: "Why was the Whoop strap ordered?"</div>
+                    <div id="conversation-container" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
+                    <div class="p-4 border-t border-slate-200 bg-white/50">
+                         <button id="chat-agent-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg flex items-center justify-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.839 8.839 0 01-4.082-.982L1 18l1.982-4.918A8.966 8.966 0 011 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM4.415 14.182A7.003 7.003 0 0010 15a7 7 0 100-14 7.003 7.003 0 00-5.585 2.818" clip-rule="evenodd" /></svg>
+                            Ask Elyx AI
+                        </button>
                     </div>
-                    <div class="p-3 border-t border-gray-600">
-                        <form id="chat-form" class="flex gap-2">
-                            <input type="text" id="chat-input" class="flex-1 bg-gray-900 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Ask a question...">
-                            <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 rounded-lg">Send</button>
-                        </form>
+                    <div id="chat-agent-window" class="flex flex-col">
+                        <div class="p-3 bg-gray-200 rounded-t-lg flex justify-between items-center">
+                            <h3 class="text-md font-semibold text-gray-900">Elyx AI Assistant</h3>
+                            <button id="chat-close-btn" class="text-gray-500 hover:text-gray-900 text-2xl font-bold">&times;</button>
+                        </div>
+                        <div id="chat-messages" class="flex-1 p-3 overflow-y-auto space-y-3 bg-white">
+                            <div class="p-2 bg-indigo-100 rounded-lg text-sm text-indigo-800">Hi! Ask me why a decision was made. For example: "Why was the Whoop strap ordered?"</div>
+                        </div>
+                        <div class="p-3 border-t border-gray-200">
+                            <form id="chat-form" class="flex gap-2">
+                                <input type="text" id="chat-input" class="flex-1 bg-gray-200 text-gray-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Ask a question...">
+                                <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 rounded-lg">Send</button>
+                            </form>
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
+                <aside class="w-1/3 lg:w-1/4 bg-white border-l border-slate-200 overflow-y-auto p-6">
+                    <h2 class="text-lg font-semibold text-gray-900 mb-4">Internal Metrics</h2>
+                    <div id="metrics-container" class="space-y-4"></div>
+                </aside>
+            </main>
 
-            <!-- Right Panel: Metrics -->
-            <aside class="w-1/3 lg:w-1/4 bg-gray-900/50 border-l border-gray-700 overflow-y-auto p-6">
-                <h2 class="text-lg font-semibold text-white mb-4">Internal Metrics</h2>
-                <div id="metrics-container" class="space-y-4">
-                    <div class="text-center text-gray-400">Loading metrics...</div>
+            <!-- Health Status Page -->
+            <main id="page-status" class="page-content hidden h-full p-8">
+                <h2 class="text-3xl font-bold text-gray-900 mb-6">Health Status Dashboard</h2>
+                <div id="health-status-container" class="space-y-8">
+                    <!-- Health status content will be injected here -->
                 </div>
-            </aside>
-        </main>
+            </main>
+
+            <!-- Profile Page -->
+            <main id="page-profile" class="page-content hidden h-full p-8">
+                <h2 class="text-3xl font-bold text-gray-900 mb-6">Member Profile</h2>
+                <div id="profile-container" class="bg-white p-6 rounded-lg shadow-md grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+            </main>
+        </div>
     </div>
 
     <!-- AI Analysis Modal -->
@@ -129,25 +167,37 @@
         const API_BASE_URL = 'https://elyx-journey-api.onrender.com';
 
         // --- DOM ELEMENT REFERENCES ---
+        const apiIndicator = document.getElementById('api-indicator');
+        const pages = {
+            home: document.getElementById('page-home'),
+            journey: document.getElementById('page-journey'),
+            status: document.getElementById('page-status'),
+            profile: document.getElementById('page-profile'),
+        };
+        const navButtons = document.querySelectorAll('.nav-btn');
+        const homeContainer = document.getElementById('home-container');
         const timelineContainer = document.getElementById('timeline-container');
         const conversationContainer = document.getElementById('conversation-container');
         const metricsContainer = document.getElementById('metrics-container');
         const conversationTitle = document.getElementById('conversation-title');
-        const apiIndicator = document.getElementById('api-indicator');
         const filterContainer = document.getElementById('filter-container');
-        const modal = document.getElementById('analysis-modal');
-        const modalBody = document.getElementById('modal-body');
-        const modalCloseBtn = document.getElementById('modal-close-btn');
         const chatAgentBtn = document.getElementById('chat-agent-btn');
         const chatAgentWindow = document.getElementById('chat-agent-window');
         const chatCloseBtn = document.getElementById('chat-close-btn');
         const chatForm = document.getElementById('chat-form');
         const chatInput = document.getElementById('chat-input');
         const chatMessages = document.getElementById('chat-messages');
+        const healthStatusContainer = document.getElementById('health-status-container');
+        const profileContainer = document.getElementById('profile-container');
+        const modal = document.getElementById('analysis-modal');
+        const modalBody = document.getElementById('modal-body');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
 
         // --- STATE MANAGEMENT ---
         let allMessages = [];
         let metricsChart = null;
+        let rhrChart = null;
+        let hrvChart = null;
 
         // --- MAPPING & HELPERS ---
         const ROLE_ICONS = { 'Concierge': '📞', 'Medical Strategist': '🩺', 'Performance Scientist': '📊', 'Nutritionist': '🍎', 'Physiotherapist': '💪', 'Concierge Lead': '⭐', 'Member': '👤', 'Personal Assistant': '📋' };
@@ -171,9 +221,53 @@
         }
 
         // --- RENDER FUNCTIONS ---
+        function renderHomePage(messages) {
+             homeContainer.innerHTML = `
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold text-slate-800 mb-4">Current Health Snapshot</h3>
+                    <ul class="space-y-3 text-slate-600">
+                        <li>HRV: <span class="font-bold text-green-600">65ms</span> (15%)</li>
+                        <li>Resting HR: <span class="font-bold text-green-600">58bpm</span> (↓3bpm)</li>
+                        <li>Glucose Avg: <span class="font-bold text-green-600">95mg/dL</span> (Stable)</li>
+                    </ul>
+                    <p class="text-sm text-slate-400 mt-4">Last updated: Aug 14, 2025</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold text-slate-800 mb-4">Upcoming Activities</h3>
+                    <ul class="space-y-3 text-slate-600">
+                        <li>Aug 20: Strength Training Session (Rachel)</li>
+                        <li>Aug 22: Water Quality Test (Ruby)</li>
+                        <li>Sept 5: VO2 Max Test (Advik)</li>
+                    </ul>
+                     <p class="text-sm text-slate-400 mt-4">Stay on track with your personalized plan!</p>
+                </div>
+                <div data-page="journey" class="bg-white p-6 rounded-lg shadow-md lg:col-span-2 cursor-pointer hover:shadow-lg transition-shadow">
+                     <h3 class="text-xl font-semibold text-slate-800 mb-2">Recent Communications</h3>
+                     <p class="text-sm text-slate-500 mb-4">Click to view full journey</p>
+                     <div id="recent-communications-container" class="space-y-4"></div>
+                </div>
+            `;
+            renderRecentCommunications(messages);
+        }
+
+        function renderRecentCommunications(messages) {
+            const recentMessages = messages.slice(-3); // Get last 3 messages
+            let commsHTML = '';
+            recentMessages.forEach(msg => {
+                const icon = ROLE_ICONS[msg.role] || '👤';
+                commsHTML += `
+                    <div class="border-t border-slate-200 pt-3">
+                        <p class="text-sm font-semibold">${icon} ${msg.sender}</p>
+                        <p class="text-sm text-slate-500 italic">"${msg.content.substring(0, 70)}..."</p>
+                    </div>
+                `;
+            });
+            document.getElementById('recent-communications-container').innerHTML = commsHTML;
+        }
+        
         function renderTimeline(milestones) {
             if (!milestones || milestones.length === 0) {
-                timelineContainer.innerHTML = '<p class="text-red-400">Could not load timeline.</p>';
+                timelineContainer.innerHTML = '<p class="text-red-500">Could not load timeline.</p>';
                 return;
             }
             const milestonesByMonth = milestones.reduce((acc, msg) => {
@@ -184,20 +278,18 @@
             }, {});
             let timelineHTML = '';
             for (const month in milestonesByMonth) {
-                timelineHTML += `<button class="month-title text-md font-semibold text-blue-400 -ml-1 mb-4 hover:underline" data-month-name="${month}">${month}</button>`;
+                timelineHTML += `<button class="month-title text-md font-semibold text-indigo-600 -ml-1 mb-4 hover:underline" data-month-name="${month}">${month}</button>`;
                 milestonesByMonth[month].forEach(milestone => {
                     const date = new Date(milestone.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-                    timelineHTML += `<div class="mb-8"><div class="absolute w-4 h-4 bg-blue-500 rounded-full -left-2 border-2 border-gray-900"></div><p class="text-sm text-gray-400">${date}</p><p class="font-medium text-white">${milestone.content}</p></div>`;
+                    timelineHTML += `<div class="mb-8"><div class="absolute w-4 h-4 bg-indigo-500 rounded-full -left-2 border-2 border-white"></div><p class="text-sm text-gray-500">${date}</p><p class="font-medium text-gray-800">${milestone.content}</p></div>`;
                 });
             }
             timelineContainer.innerHTML = timelineHTML;
         }
 
         function renderConversation(messages, filterRole = null) {
-            if (!messages || messages.length === 0) {
-                conversationContainer.innerHTML = '<p class="text-red-400">Could not load conversation.</p>';
-                return;
-            }
+            const container = conversationContainer;
+            if (!messages || !container) return;
             const filteredMessages = filterRole ? messages.filter(msg => msg.role === filterRole || msg.role === 'Member') : messages;
             conversationTitle.textContent = filterRole ? `Conversation with ${filterRole}` : 'Full Conversation';
             let conversationHTML = '';
@@ -205,28 +297,28 @@
             filteredMessages.forEach(msg => {
                 const msgDate = new Date(msg.timestamp).toLocaleDateString();
                 if (msgDate !== lastDate) {
-                    conversationHTML += `<div class="text-center my-4"><span class="bg-gray-700 text-gray-300 text-xs font-medium px-3 py-1 rounded-full">${new Date(msg.timestamp).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</span></div>`;
+                    conversationHTML += `<div class="text-center my-4"><span class="bg-slate-200 text-slate-600 text-xs font-medium px-3 py-1 rounded-full">${new Date(msg.timestamp).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</span></div>`;
                     lastDate = msgDate;
                 }
                 const isMember = msg.role === 'Member';
                 const alignment = isMember ? 'justify-end' : 'justify-start';
-                const bgColor = isMember ? 'bg-blue-600' : 'bg-gray-600';
+                const bgColor = isMember ? 'bg-blue-600 text-white' : 'bg-white text-gray-800';
                 const senderName = isMember ? 'You (Rohan Patel)' : `${msg.sender} (${msg.role})`;
                 const icon = ROLE_ICONS[msg.role] || '👤';
                 const isDecision = msg.tags.type === 'decision';
                 const extraBubbleClasses = isDecision ? 'decision-bubble' : '';
-                const decisionIndicatorHTML = isDecision ? '<p class="text-xs text-indigo-200 mt-2 font-semibold border-t border-indigo-400/50 pt-1">💡 Click to see why</p>' : '';
-                conversationHTML += `<div class="flex ${alignment} message-bubble" data-message-id="${msg.id}" data-message-type="${msg.tags.type || ''}"><div class="max-w-md lg:max-w-lg px-4 py-2 rounded-lg ${bgColor} text-white shadow-md ${extraBubbleClasses}"><p class="text-sm font-bold mb-1">${icon} ${senderName}</p><p class="text-sm">${msg.content.replace(/\n/g, '<br>')}</p><p class="text-xs text-gray-300 text-right mt-1">${new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>${decisionIndicatorHTML}</div></div>`;
+                const decisionIndicatorHTML = isDecision ? `<p class="text-xs ${isMember ? 'text-indigo-200' : 'text-indigo-500'} mt-2 font-semibold border-t border-indigo-400/50 pt-1">💡 Click to see why</p>` : '';
+                conversationHTML += `<div class="flex ${alignment} message-bubble" data-message-id="${msg.id}" data-message-type="${msg.tags.type || ''}"><div class="max-w-md lg:max-w-lg px-4 py-2 rounded-lg shadow-md ${bgColor} ${extraBubbleClasses}"><p class="text-sm font-bold mb-1">${icon} ${senderName}</p><p class="text-sm">${msg.content.replace(/\n/g, '<br>')}</p><p class="text-xs ${isMember ? 'text-blue-200' : 'text-gray-500'} text-right mt-1">${new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>${decisionIndicatorHTML}</div></div>`;
             });
-            conversationContainer.innerHTML = conversationHTML || '<p class="text-center text-gray-400">No messages match this filter.</p>';
+            container.innerHTML = conversationHTML || '<p class="text-center text-gray-500">No messages match this filter.</p>';
         }
 
         function renderMetrics(metrics) {
             if (!metrics) {
-                metricsContainer.innerHTML = '<p class="text-red-400">Could not load metrics.</p>';
+                metricsContainer.innerHTML = '<p class="text-red-500">Could not load metrics.</p>';
                 return;
             }
-            metricsContainer.innerHTML = `<div class="bg-gray-800 p-4 rounded-lg shadow"><p class="text-gray-400 text-sm">Total Elyx Team Interactions</p><p class="text-2xl font-bold text-white">${metrics.total_elyx_team_interactions}</p></div><div class="bg-gray-800 p-4 rounded-lg shadow"><p class="text-gray-400 text-sm mb-2">Interactions by Role</p><canvas id="metricsChart"></canvas></div>`;
+            metricsContainer.innerHTML = `<div class="bg-white p-4 rounded-lg shadow"><p class="text-gray-500 text-sm">Total Elyx Team Interactions</p><p class="text-2xl font-bold text-gray-900">${metrics.total_elyx_team_interactions}</p></div><div class="bg-white p-4 rounded-lg shadow"><p class="text-gray-500 text-sm mb-2">Interactions by Role</p><canvas id="metricsChart"></canvas></div>`;
             renderMetricsChart(metrics.interactions_by_role);
         }
 
@@ -235,36 +327,100 @@
             if (metricsChart) metricsChart.destroy();
             metricsChart = new Chart(ctx, {
                 type: 'bar',
-                data: { labels: Object.keys(data), datasets: [{ label: 'Interactions', data: Object.values(data), backgroundColor: 'rgba(59, 130, 246, 0.5)', borderColor: 'rgba(59, 130, 246, 1)', borderWidth: 1 }] },
-                options: { indexAxis: 'y', scales: { x: { ticks: { color: '#d1d5db' } }, y: { ticks: { color: '#d1d5db' } } }, plugins: { legend: { display: false } } }
+                data: { labels: Object.keys(data), datasets: [{ label: 'Interactions', data: Object.values(data), backgroundColor: 'rgba(79, 70, 229, 0.5)', borderColor: 'rgba(79, 70, 229, 1)', borderWidth: 1 }] },
+                options: { indexAxis: 'y', scales: { x: { ticks: { color: '#374151' } }, y: { ticks: { color: '#374151' } } }, plugins: { legend: { display: false } } }
             });
         }
 
         function renderFilterControls(messages) {
             const roles = [...new Set(messages.filter(m => m.role !== 'Member' && m.role !== 'Personal Assistant').map(m => m.role))];
-            let filterHTML = '<button class="filter-btn active px-3 py-1 text-sm font-medium rounded-full bg-blue-600 text-white" data-role="all">All</button>';
+            let filterHTML = '<button class="filter-btn active px-3 py-1 text-sm font-medium rounded-full bg-indigo-600 text-white" data-role="all">All</button>';
             roles.forEach(role => {
-                filterHTML += `<button class="filter-btn px-3 py-1 text-sm font-medium rounded-full bg-gray-700 text-gray-300 hover:bg-gray-600" data-role="${role}">${ROLE_ICONS[role]} ${role}</button>`;
+                filterHTML += `<button class="filter-btn px-3 py-1 text-sm font-medium rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300" data-role="${role}">${ROLE_ICONS[role]} ${role}</button>`;
             });
             filterContainer.innerHTML = filterHTML;
         }
 
+        function renderHealthStatus(messages) {
+            const apoBMessage = messages.find(m => m.content.includes("Your ApoB is"));
+            const apoBValue = apoBMessage ? apoBMessage.content.match(/ApoB is (\d+)/)[1] : 'N/A';
+            
+            let healthHTML = `
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="font-semibold text-gray-800">Sleep Performance</h3>
+                        <p class="mt-2 text-3xl font-bold text-indigo-600">86%</p>
+                        <p class="text-sm text-gray-500">Optimal</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="font-semibold text-gray-800">Activity Goal</h3>
+                        <p class="mt-2 text-3xl font-bold text-indigo-600">94%</p>
+                        <p class="text-sm text-gray-500">Met</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="font-semibold text-gray-800">Readiness</h3>
+                        <p class="mt-2 text-3xl font-bold text-indigo-600">91%</p>
+                        <p class="text-sm text-gray-500">Ready to Go</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-lg font-semibold text-gray-900">Key Biomarker: ApoB</h3>
+                        <p class="text-4xl font-bold text-indigo-600 mt-2">${apoBValue} <span class="text-lg font-medium text-gray-500">mg/dL</span></p>
+                        <p class="text-sm text-gray-500 mt-2">Last measured: March 2025. This is a primary focus for long-term risk reduction.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-lg font-semibold text-gray-900">Heart Rate Variability (HRV)</h3>
+                        <canvas id="hrvChart"></canvas>
+                    </div>
+                </div>
+            `;
+            healthStatusContainer.innerHTML = healthHTML;
+
+            const hrvCtx = document.getElementById('hrvChart').getContext('2d');
+            if (hrvChart) hrvChart.destroy();
+            hrvChart = new Chart(hrvCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+                    datasets: [{
+                        label: 'Avg HRV Trend (ms)',
+                        data: [42, 41, 45, 48, 44, 49, 52, 55], // Simulated data
+                        borderColor: 'rgba(79, 70, 229, 1)',
+                        backgroundColor: 'rgba(79, 70, 229, 0.2)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: { scales: { x: { ticks: { color: '#374151' } }, y: { ticks: { color: '#374151' } } }, plugins: { legend: { display: false } } }
+            });
+        }
+
+        function renderProfilePage() {
+            const profileData = { "Name": "Rohan Patel", "Born": "12 March 1979 (Age 46)", "Occupation": "Regional Head of Sales, FinTech", "Residence": "Singapore", "Travel Hubs": "UK, US, South Korea, Jakarta", "Goal 1": "Reduce risk of heart disease by Dec 2026.", "Goal 2": "Enhance cognitive function by June 2026.", "Goal 3": "Implement annual full-body health screenings.", "Motivations": "Family history of heart disease; sustain career performance; be present for his young children.", "Personality": "Analytical, driven, values efficiency and evidence-based approaches.", "Wearables": "Garmin watch (used for runs), considering Oura ring." };
+            let profileHTML = '';
+            for(const [key, value] of Object.entries(profileData)) {
+                profileHTML += `<div><p class="text-sm text-gray-500">${key}</p><p class="font-semibold text-gray-900">${value}</p></div>`;
+            }
+            profileContainer.innerHTML = profileHTML;
+        }
+
         function renderAnalysisModal(analysis) {
             if (!analysis) {
-                modalBody.innerHTML = '<p class="text-red-400">Could not load analysis for this episode.</p>';
+                modalBody.innerHTML = '<p class="text-red-500">Could not load analysis for this episode.</p>';
                 return;
             }
             modalBody.innerHTML = `
-                <h2 class="text-2xl font-bold text-white mb-4">Episode Analysis: ${analysis.month_name}</h2>
-                <div class="space-y-4 text-gray-300">
-                    <div><h3 class="font-semibold text-blue-400">Primary Goal / Trigger</h3><p>${analysis.primary_goal_trigger}</p></div>
-                    <div><h3 class="font-semibold text-blue-400">Friction Points</h3><ul class="list-disc list-inside">${analysis.friction_points.map(fp => `<li>${fp}</li>`).join('')}</ul></div>
-                    <div><h3 class="font-semibold text-blue-400">Final Outcome</h3><p>${analysis.final_outcome}</p></div>
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">Episode Analysis: ${analysis.month_name}</h2>
+                <div class="space-y-4 text-gray-600">
+                    <div><h3 class="font-semibold text-indigo-600">Primary Goal / Trigger</h3><p>${analysis.primary_goal_trigger}</p></div>
+                    <div><h3 class="font-semibold text-indigo-600">Friction Points</h3><ul class="list-disc list-inside">${analysis.friction_points.map(fp => `<li>${fp}</li>`).join('')}</ul></div>
+                    <div><h3 class="font-semibold text-indigo-600">Final Outcome</h3><p>${analysis.final_outcome}</p></div>
                     <div>
-                        <h3 class="font-semibold text-blue-400 mb-2">Stateful Persona Analysis</h3>
+                        <h3 class="font-semibold text-indigo-600 mb-2">Stateful Persona Analysis</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="bg-gray-800 p-3 rounded-lg"><h4 class="font-semibold text-green-400">Before State</h4><p class="text-sm">${analysis.persona_analysis.before}</p></div>
-                            <div class="bg-gray-800 p-3 rounded-lg"><h4 class="font-semibold text-green-400">After State</h4><p class="text-sm">${analysis.persona_analysis.after}</p></div>
+                            <div class="bg-gray-100 p-3 rounded-lg"><h4 class="font-semibold text-green-600">Before State</h4><p class="text-sm">${analysis.persona_analysis.before}</p></div>
+                            <div class="bg-gray-100 p-3 rounded-lg"><h4 class="font-semibold text-green-600">After State</h4><p class="text-sm">${analysis.persona_analysis.after}</p></div>
                         </div>
                     </div>
                 </div>
@@ -291,20 +447,16 @@
             const decisions = allMessages.filter(m => m.tags.type === 'decision');
             let bestMatch = null;
             let maxScore = 0;
-
             decisions.forEach(decision => {
                 let score = 0;
                 keywords.forEach(keyword => {
-                    if (decision.content.toLowerCase().includes(keyword)) {
-                        score++;
-                    }
+                    if (decision.content.toLowerCase().includes(keyword)) score++;
                 });
                 if (score > maxScore) {
                     maxScore = score;
                     bestMatch = decision;
                 }
             });
-
             if (bestMatch) {
                 const reasons = allMessages.filter(m => m.tags.type === 'reason' && m.tags.linked_id === bestMatch.id);
                 return { decision: bestMatch, reasons };
@@ -313,7 +465,7 @@
         }
 
         function addChatMessage(message, isUser = false) {
-            const bgColor = isUser ? 'bg-blue-600' : 'bg-indigo-500/50';
+            const bgColor = isUser ? 'bg-blue-600 text-white' : 'bg-indigo-100 text-indigo-800';
             const messageEl = document.createElement('div');
             messageEl.className = `p-2 ${bgColor} rounded-lg text-sm`;
             messageEl.innerHTML = message;
@@ -322,6 +474,16 @@
         }
 
         // --- EVENT HANDLERS ---
+        function handleNavClick(event) {
+            const page = event.target.dataset.page;
+            Object.values(pages).forEach(p => p.classList.add('hidden'));
+            if (pages[page]) pages[page].classList.remove('hidden');
+            navButtons.forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.page === page) btn.classList.add('active');
+            });
+        }
+
         async function handleConversationClick(event) {
             const messageElement = event.target.closest('[data-message-id]');
             if (!messageElement) return;
@@ -338,12 +500,12 @@
         function handleFilterClick(event) {
             if (!event.target.classList.contains('filter-btn')) return;
             document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active', 'bg-blue-600', 'text-white');
-                btn.classList.add('bg-gray-700', 'text-gray-300');
+                btn.classList.remove('active', 'bg-indigo-600', 'text-white');
+                btn.classList.add('bg-gray-200', 'text-gray-700');
             });
             const clickedBtn = event.target;
-            clickedBtn.classList.add('active', 'bg-blue-600', 'text-white');
-            clickedBtn.classList.remove('bg-gray-700', 'text-gray-300');
+            clickedBtn.classList.add('active', 'bg-indigo-600', 'text-white');
+            clickedBtn.classList.remove('bg-gray-200', 'text-gray-700');
             const role = clickedBtn.dataset.role;
             renderConversation(allMessages, role === 'all' ? null : role);
         }
@@ -361,10 +523,8 @@
             event.preventDefault();
             const query = chatInput.value.trim();
             if (!query) return;
-
             addChatMessage(query, true);
             chatInput.value = '';
-
             const result = findDecisionAndReasons(query);
             if (result && result.reasons.length > 0) {
                 let response = `The decision to "${result.decision.content.substring(0, 50)}..." was made for the following reasons:<ul class="list-disc list-inside mt-2">`;
@@ -378,6 +538,15 @@
                 addChatMessage("I couldn't find a specific reason for that decision in the log. Please try rephrasing your question or check the conversation manually.");
             }
         }
+        
+        function handleHomePageCardClick(event) {
+            const card = event.target.closest('[data-page="journey"]');
+            if (!card) return;
+            const journeyNavButton = document.querySelector('.nav-btn[data-page="journey"]');
+            if (journeyNavButton) {
+                journeyNavButton.click();
+            }
+        }
 
         // --- INITIALIZATION ---
         async function initializeApp() {
@@ -388,21 +557,24 @@
             ]);
             allMessages = allMessagesData || [];
 
+            // Render all components for all pages
+            renderHomePage(allMessages);
             renderTimeline(timelineData);
             renderConversation(allMessages);
             renderMetrics(metricsData);
             renderFilterControls(allMessages);
+            renderHealthStatus(allMessages);
+            renderProfilePage();
 
+            navButtons.forEach(btn => btn.addEventListener('click', handleNavClick));
+            homeContainer.addEventListener('click', handleHomePageCardClick);
             conversationContainer.addEventListener('click', handleConversationClick);
             filterContainer.addEventListener('click', handleFilterClick);
             timelineContainer.addEventListener('click', handleTimelineClick);
-            
-            // Chat Agent Listeners
             chatAgentBtn.addEventListener('click', () => { chatAgentWindow.style.display = 'flex'; });
             chatCloseBtn.addEventListener('click', () => { chatAgentWindow.style.display = 'none'; });
             chatForm.addEventListener('submit', handleChatSubmit);
             
-            // Modal close logic
             modalCloseBtn.onclick = () => { modal.style.display = "none"; };
             window.onclick = (event) => { if (event.target == modal) { modal.style.display = "none"; } };
         }
