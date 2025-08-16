@@ -16,7 +16,7 @@
         /* Custom Styles */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f9fafb; /* Softer off-white background (gray-50) */
+            background-color: #f8fafc; /* Softer off-white background (slate-50) */
             color: #334155; /* Slate gray text */
         }
         ::-webkit-scrollbar { width: 8px; }
@@ -92,8 +92,8 @@
             <!-- Home Page -->
             <main id="page-home" class="page-content p-8">
                 <h1 class="text-4xl font-bold text-slate-900">Welcome, Rohan!</h1>
-                <p class="text-lg text-slate-600 mt-1">This is your personalized health dashboard. Here, you'll find an overview of your progress, key metrics, and upcoming activities.</p>
-                <div id="home-container" class="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <p class="text-lg text-slate-600 mt-1">This is your personalized health dashboard.</p>
+                <div id="home-container" class="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <!-- Home page cards will be injected here -->
                 </div>
             </main>
@@ -198,6 +198,7 @@
         let metricsChart = null;
         let rhrChart = null;
         let hrvChart = null;
+        let sentimentChart = null;
 
         // --- MAPPING & HELPERS ---
         const ROLE_ICONS = { 'Concierge': '📞', 'Medical Strategist': '🩺', 'Performance Scientist': '📊', 'Nutritionist': '🍎', 'Physiotherapist': '💪', 'Concierge Lead': '⭐', 'Member': '👤', 'Personal Assistant': '📋' };
@@ -241,6 +242,11 @@
                     </ul>
                      <p class="text-sm text-slate-400 mt-4">Stay on track with your personalized plan!</p>
                 </div>
+                <div class="bg-white p-6 rounded-lg shadow-md cursor-pointer hover:shadow-lg transition-shadow" id="weekly-report-card">
+                     <h3 class="text-xl font-semibold text-slate-800 mb-2">Weekly Summary</h3>
+                     <p class="text-sm text-slate-500 mb-4">Click to generate an AI-powered summary of the last week's progress and focus areas.</p>
+                     <button id="generate-report-btn" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-4 rounded-lg">Generate Report</button>
+                </div>
                 <div data-page="journey" class="bg-white p-6 rounded-lg shadow-md lg:col-span-2 cursor-pointer hover:shadow-lg transition-shadow">
                      <h3 class="text-xl font-semibold text-slate-800 mb-2">Recent Communications</h3>
                      <p class="text-sm text-slate-500 mb-4">Click to view full journey</p>
@@ -251,16 +257,11 @@
         }
 
         function renderRecentCommunications(messages) {
-            const recentMessages = messages.slice(-3); // Get last 3 messages
+            const recentMessages = messages.slice(-3);
             let commsHTML = '';
             recentMessages.forEach(msg => {
                 const icon = ROLE_ICONS[msg.role] || '👤';
-                commsHTML += `
-                    <div class="border-t border-slate-200 pt-3">
-                        <p class="text-sm font-semibold">${icon} ${msg.sender}</p>
-                        <p class="text-sm text-slate-500 italic">"${msg.content.substring(0, 70)}..."</p>
-                    </div>
-                `;
+                commsHTML += `<div class="border-t border-slate-200 pt-3"><p class="text-sm font-semibold">${icon} ${msg.sender}</p><p class="text-sm text-slate-500 italic">"${msg.content.substring(0, 70)}..."</p></div>`;
             });
             document.getElementById('recent-communications-container').innerHTML = commsHTML;
         }
@@ -341,58 +342,44 @@
             filterContainer.innerHTML = filterHTML;
         }
 
-        function renderHealthStatus(messages) {
+        function renderHealthStatus(messages, sentimentData) {
             const apoBMessage = messages.find(m => m.content.includes("Your ApoB is"));
             const apoBValue = apoBMessage ? apoBMessage.content.match(/ApoB is (\d+)/)[1] : 'N/A';
             
             let healthHTML = `
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                    <div class="bg-white p-6 rounded-lg shadow-md">
-                        <h3 class="font-semibold text-gray-800">Sleep Performance</h3>
-                        <p class="mt-2 text-3xl font-bold text-indigo-600">86%</p>
-                        <p class="text-sm text-gray-500">Optimal</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-lg shadow-md">
-                        <h3 class="font-semibold text-gray-800">Activity Goal</h3>
-                        <p class="mt-2 text-3xl font-bold text-indigo-600">94%</p>
-                        <p class="text-sm text-gray-500">Met</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-lg shadow-md">
-                        <h3 class="font-semibold text-gray-800">Readiness</h3>
-                        <p class="mt-2 text-3xl font-bold text-indigo-600">91%</p>
-                        <p class="text-sm text-gray-500">Ready to Go</p>
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <div class="bg-white p-6 rounded-lg shadow-md">
                         <h3 class="text-lg font-semibold text-gray-900">Key Biomarker: ApoB</h3>
                         <p class="text-4xl font-bold text-indigo-600 mt-2">${apoBValue} <span class="text-lg font-medium text-gray-500">mg/dL</span></p>
                         <p class="text-sm text-gray-500 mt-2">Last measured: March 2025. This is a primary focus for long-term risk reduction.</p>
                     </div>
                     <div class="bg-white p-6 rounded-lg shadow-md">
-                        <h3 class="text-lg font-semibold text-gray-900">Heart Rate Variability (HRV)</h3>
-                        <canvas id="hrvChart"></canvas>
+                        <h3 class="text-lg font-semibold text-gray-900">Member Satisfaction Trend</h3>
+                        <canvas id="sentimentChart"></canvas>
                     </div>
                 </div>
             `;
             healthStatusContainer.innerHTML = healthHTML;
-
-            const hrvCtx = document.getElementById('hrvChart').getContext('2d');
-            if (hrvChart) hrvChart.destroy();
-            hrvChart = new Chart(hrvCtx, {
+            renderSentimentChart(sentimentData);
+        }
+        
+        function renderSentimentChart(data) {
+            const ctx = document.getElementById('sentimentChart').getContext('2d');
+            if (sentimentChart) sentimentChart.destroy();
+            sentimentChart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+                    labels: data.map(d => d.month.split(' ')[0]),
                     datasets: [{
-                        label: 'Avg HRV Trend (ms)',
-                        data: [42, 41, 45, 48, 44, 49, 52, 55], // Simulated data
-                        borderColor: 'rgba(79, 70, 229, 1)',
-                        backgroundColor: 'rgba(79, 70, 229, 0.2)',
+                        label: 'Avg Sentiment Score',
+                        data: data.map(d => d.score),
+                        borderColor: 'rgba(22, 163, 74, 1)',
+                        backgroundColor: 'rgba(22, 163, 74, 0.2)',
                         fill: true,
                         tension: 0.4
                     }]
                 },
-                options: { scales: { x: { ticks: { color: '#374151' } }, y: { ticks: { color: '#374151' } } }, plugins: { legend: { display: false } } }
+                options: { scales: { x: { ticks: { color: '#374151' } }, y: { ticks: { color: '#374151', min: -1, max: 1 } } }, plugins: { legend: { display: false } } }
             });
         }
 
@@ -405,25 +392,10 @@
             profileContainer.innerHTML = profileHTML;
         }
 
-        function renderAnalysisModal(analysis) {
-            if (!analysis) {
-                modalBody.innerHTML = '<p class="text-red-500">Could not load analysis for this episode.</p>';
-                return;
-            }
+        function renderAnalysisModal(title, content) {
             modalBody.innerHTML = `
-                <h2 class="text-2xl font-bold text-gray-900 mb-4">Episode Analysis: ${analysis.month_name}</h2>
-                <div class="space-y-4 text-gray-600">
-                    <div><h3 class="font-semibold text-indigo-600">Primary Goal / Trigger</h3><p>${analysis.primary_goal_trigger}</p></div>
-                    <div><h3 class="font-semibold text-indigo-600">Friction Points</h3><ul class="list-disc list-inside">${analysis.friction_points.map(fp => `<li>${fp}</li>`).join('')}</ul></div>
-                    <div><h3 class="font-semibold text-indigo-600">Final Outcome</h3><p>${analysis.final_outcome}</p></div>
-                    <div>
-                        <h3 class="font-semibold text-indigo-600 mb-2">Stateful Persona Analysis</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="bg-gray-100 p-3 rounded-lg"><h4 class="font-semibold text-green-600">Before State</h4><p class="text-sm">${analysis.persona_analysis.before}</p></div>
-                            <div class="bg-gray-100 p-3 rounded-lg"><h4 class="font-semibold text-green-600">After State</h4><p class="text-sm">${analysis.persona_analysis.after}</p></div>
-                        </div>
-                    </div>
-                </div>
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">${title}</h2>
+                <div class="space-y-4 text-gray-600">${content}</div>
             `;
         }
 
@@ -516,7 +488,28 @@
             modalBody.innerHTML = '<p>Generating AI analysis...</p>';
             modal.style.display = 'block';
             const analysisData = await fetchData(`/episodes/${encodeURIComponent(monthName)}`);
-            renderAnalysisModal(analysisData);
+            const analysisHTML = `
+                <div class="space-y-4 text-gray-600">
+                    <div><h3 class="font-semibold text-indigo-600">Primary Goal / Trigger</h3><p>${analysisData.primary_goal_trigger}</p></div>
+                    <div><h3 class="font-semibold text-indigo-600">Friction Points</h3><ul class="list-disc list-inside">${analysisData.friction_points.map(fp => `<li>${fp}</li>`).join('')}</ul></div>
+                    <div><h3 class="font-semibold text-indigo-600">Final Outcome</h3><p>${analysisData.final_outcome}</p></div>
+                    <div>
+                        <h3 class="font-semibold text-indigo-600 mb-2">Stateful Persona Analysis</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-gray-100 p-3 rounded-lg"><h4 class="font-semibold text-green-600">Before State</h4><p class="text-sm">${analysisData.persona_analysis.before}</p></div>
+                            <div class="bg-gray-100 p-3 rounded-lg"><h4 class="font-semibold text-green-600">After State</h4><p class="text-sm">${analysisData.persona_analysis.after}</p></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            renderAnalysisModal(`Episode Analysis: ${analysisData.month_name}`, analysisHTML);
+        }
+        
+        async function handleReportGeneration() {
+            modalBody.innerHTML = '<p>Generating AI weekly summary...</p>';
+            modal.style.display = 'block';
+            const reportData = await fetchData(`/reports/weekly`);
+            renderAnalysisModal(`Weekly Report: ${reportData.week_of}`, reportData.summary);
         }
 
         function handleChatSubmit(event) {
@@ -550,10 +543,11 @@
 
         // --- INITIALIZATION ---
         async function initializeApp() {
-            const [timelineData, allMessagesData, metricsData] = await Promise.all([
+            const [timelineData, allMessagesData, metricsData, sentimentData] = await Promise.all([
                 fetchData('/messages/timeline'),
                 fetchData('/messages'),
-                fetchData('/metrics/internal')
+                fetchData('/metrics/internal'),
+                fetchData('/metrics/sentiment')
             ]);
             allMessages = allMessagesData || [];
 
@@ -563,11 +557,16 @@
             renderConversation(allMessages);
             renderMetrics(metricsData);
             renderFilterControls(allMessages);
-            renderHealthStatus(allMessages);
+            renderHealthStatus(allMessages, sentimentData);
             renderProfilePage();
 
             navButtons.forEach(btn => btn.addEventListener('click', handleNavClick));
             homeContainer.addEventListener('click', handleHomePageCardClick);
+            homeContainer.addEventListener('click', (event) => {
+                if(event.target.closest('#weekly-report-card')) {
+                    handleReportGeneration();
+                }
+            });
             conversationContainer.addEventListener('click', handleConversationClick);
             filterContainer.addEventListener('click', handleFilterClick);
             timelineContainer.addEventListener('click', handleTimelineClick);
