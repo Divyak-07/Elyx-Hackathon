@@ -124,6 +124,23 @@ async def get_internal_metrics():
             role_counts[msg.role] = role_counts.get(msg.role, 0) + 1
     return {"total_elyx_team_interactions": sum(role_counts.values()), "interactions_by_role": role_counts}
 
+@app.get("/metrics/sentiment", tags=["Metrics"])
+async def get_sentiment_metrics():
+    """
+    Provides simulated monthly sentiment scores based on Rohan's journey.
+    """
+    sentiment_data = [
+        {"month": "January 2025", "score": -0.2},
+        {"month": "February 2025", "score": 0.1},
+        {"month": "March 2025", "score": -0.5},
+        {"month": "April 2025", "score": 0.4},
+        {"month": "May 2025", "score": -0.3},
+        {"month": "June 2025", "score": 0.7},
+        {"month": "July 2025", "score": 0.8},
+        {"month": "August 2025", "score": 0.9}
+    ]
+    return sentiment_data
+
 @app.get("/episodes/{month_name}", response_model=EpisodeAnalysis, tags=["Episodes"])
 async def get_episode_analysis(month_name: str):
     try:
