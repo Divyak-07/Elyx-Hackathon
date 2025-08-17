@@ -1,12 +1,14 @@
 # main.py
-# This file contains the final FastAPI application with new AI endpoints.
+# This file contains the FastAPI application updated to call the Google Gemini model.
 
 import json
+import os
 from typing import List, Optional, Dict
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Body
 from pydantic import BaseModel
-from datetime import datetime, timedelta
+from datetime import datetime
 from fastapi.middleware.cors import CORSMiddleware
+import google.generativeai as genai
 
 # --- Pydantic Models for Data Validation ---
 class Tag(BaseModel):
@@ -31,6 +33,9 @@ class EpisodeAnalysis(BaseModel):
     friction_points: List[str]
     final_outcome: str
     persona_analysis: PersonaState
+    
+class ChatQuery(BaseModel):
+    query: str
 
 class SentimentPoint(BaseModel):
     month: str
@@ -62,6 +67,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# --- Configure Google AI Client ---
+# The API key is read from an environment variable set in Render.
+try:
+    genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
+except Exception as e:
+    print(f"Could not configure Google AI: {e}")
+
+
 # --- Data Loading ---
 def load_journey_data() -> List[Message]:
     try:
@@ -74,10 +87,9 @@ def load_journey_data() -> List[Message]:
 
 MESSAGES = load_journey_data()
 
-# --- AI SIMULATION FUNCTIONS ---
-
+# --- AI SIMULATION & GENERATION FUNCTIONS ---
 def get_ai_analysis(month_name: str, messages: List[Message]) -> EpisodeAnalysis:
-    # (Existing simulation logic)
+    # This remains a simulation for the persona analysis feature
     pre_written_analyses = {
         "February 2025": { "primary_goal_trigger": "Rohan expresses anxiety over an upcoming board presentation...", "friction_points": ["Garmin HR zones wrong...", "Plan is sparse..."], "final_outcome": "A foundational plan is created...", "persona_analysis": { "before": "Anxious and data-skeptical...", "after": "Becoming more engaged..." } },
         "May 2025": { "primary_goal_trigger": "Rohan wakes up with a sudden viral illness...", "friction_points": ["Frustration over setback..."], "final_outcome": "The team executes a 'Sick Day Protocol'...", "persona_analysis": { "before": "Feeling confident...", "after": "Frustrated but sees value..." } },
@@ -116,7 +128,6 @@ def get_sentiment_scores() -> List[SentimentPoint]:
 
 def get_weekly_report(end_date_str: str) -> WeeklyReport:
     """Simulates an AI generating a weekly report for a specific week."""
-    # For this demo, we'll return a pre-written report for a specific week in August.
     summary = """
     <ul class='list-disc list-inside space-y-2'>
         <li><span class='font-semibold'>Key Achievement:</span> Successfully managed muscle soreness from the new strength program by implementing a post-workout nutrition protocol (protein/creatine shake). Recovery metrics improved significantly.</li>
@@ -167,12 +178,35 @@ async def get_episode_analysis(month_name: str):
 
 @app.get("/metrics/sentiment", response_model=List[SentimentPoint], tags=["AI Metrics"])
 async def get_sentiment_trend():
-    """NEW: Returns the simulated sentiment trend of the member over time."""
     if not MESSAGES: raise HTTPException(status_code=404, detail="Journey data not loaded.")
     return get_sentiment_scores()
 
 @app.get("/reports/weekly", response_model=WeeklyReport, tags=["AI Reports"])
 async def generate_weekly_report(end_date: str = "2025-08-18"):
-    """NEW: Generates a simulated AI weekly report for a given week."""
     if not MESSAGES: raise HTTPException(status_code=404, detail="Journey data not loaded.")
     return get_weekly_report(end_date)
+    
+@app.post("/chat", tags=["AI Agent"])
+async def chat_with_agent(payload: ChatQuery):
+    if not genai.api_key:
+        raise HTTPException(status_code=500, detail="Google API key is not configured on the server.")
+
+    conversation_context = "\n".join([f"[{msg.timestamp.strftime('%Y-%m-%d')}] {msg.sender}: {msg.content}" for msg in MESSAGES])
+
+    prompt = f"""
+    You are the Elyx AI assistant. Your role is to answer questions about a member's health journey based ONLY on the conversation history provided below.
+    Be concise and helpful. Find the relevant decision and explain the reasons that led to it based on the conversation.
+
+    --- CONVERSATION HISTORY ---
+    {conversation_context}
+    ----------------------------
+
+    Based on the history, please answer the following question: "{payload.query}"
+    """
+
+    try:
+        model = genai.GenerativeModel('gemini-pro')
+        response = model.generate_content(prompt)
+        return {"answer": response.text}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error communicating with Google AI: {str(e)}")
