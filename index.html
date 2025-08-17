@@ -37,7 +37,7 @@
 
         /* Modal Styles */
         .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(5px); }
-        .modal-content { background-color: #ffffff; margin: 10% auto; padding: 2rem; border: 1px solid #d1d5db; width: 90%; max-width: 600px; border-radius: 0.75rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5); }
+        .modal-content { background-color: #ffffff; margin: 10% auto; padding: 2rem; border: 1px solid #d1d5db; width: 80%; max-width: 600px; border-radius: 0.75rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5); }
         .modal-close { color: #9ca3af; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
         .modal-close:hover, .modal-close:focus { color: #111827; text-decoration: none; }
 
@@ -63,30 +63,25 @@
 
     <div class="flex flex-col h-screen">
         <!-- Header -->
-        <header class="bg-slate-800 p-4 shadow-md z-20">
+        <header class="bg-slate-800 p-4 shadow-md z-10">
             <div class="max-w-7xl mx-auto">
                 <div class="flex justify-between items-center">
                     <div>
-                        <h1 class="text-xl md:text-2xl font-bold text-white">Elyx Member Dashboard</h1>
+                        <h1 class="text-2xl font-bold text-white">Elyx Member Dashboard</h1>
                         <p class="text-sm text-slate-300">Rohan Patel</p>
                     </div>
-                    <div id="api-status" class="hidden md:flex items-center space-x-2">
+                    <div id="api-status" class="flex items-center space-x-2">
                         <span class="text-sm font-medium text-slate-300">API Status:</span>
                         <div id="api-indicator" class="w-3 h-3 rounded-full bg-yellow-400 animate-pulse"></div>
                     </div>
-                    <div class="md:hidden">
-                        <button id="menu-btn" class="text-white">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-                        </button>
-                    </div>
                 </div>
                 <!-- Navigation Tabs -->
-                <nav id="nav-menu" class="mt-4 hidden md:block">
-                    <div class="flex flex-col md:flex-row md:space-x-2">
-                        <button class="nav-btn active text-left" data-page="home">Home</button>
-                        <button class="nav-btn text-left" data-page="journey">Journey</button>
-                        <button class="nav-btn text-left" data-page="status">Health Status</button>
-                        <button class="nav-btn text-left" data-page="profile">Profile</button>
+                <nav class="mt-4">
+                    <div class="flex space-x-2">
+                        <button class="nav-btn active" data-page="home">Home</button>
+                        <button class="nav-btn" data-page="journey">Journey</button>
+                        <button class="nav-btn" data-page="status">Health Status</button>
+                        <button class="nav-btn" data-page="profile">Profile</button>
                     </div>
                 </nav>
             </div>
@@ -95,29 +90,23 @@
         <!-- Main Content Area -->
         <div class="flex-1 overflow-y-auto">
             <!-- Home Page -->
-            <main id="page-home" class="page-content p-4 md:p-8">
-                <h1 class="text-3xl md:text-4xl font-bold text-slate-900">Welcome, Rohan!</h1>
-                <p class="text-md md:text-lg text-slate-600 mt-1">This is your personalized health dashboard.</p>
-                <div id="home-container" class="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
+            <main id="page-home" class="page-content p-8">
+                <h1 class="text-4xl font-bold text-slate-900">Welcome, Rohan!</h1>
+                <p class="text-lg text-slate-600 mt-1">This is your personalized health dashboard. Here, you'll find an overview of your progress, key metrics, and upcoming activities.</p>
+                <div id="home-container" class="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <!-- Home page cards will be injected here -->
                 </div>
             </main>
 
             <!-- Journey Page -->
-            <main id="page-journey" class="page-content hidden h-full flex flex-col md:flex-row">
-                <aside id="timeline-sidebar" class="w-full md:w-1/3 lg:w-1/4 bg-white border-r border-slate-200 overflow-y-auto p-6 hidden md:block">
+            <main id="page-journey" class="page-content hidden h-full flex">
+                <aside class="w-1/3 lg:w-1/4 bg-white border-r border-slate-200 overflow-y-auto p-6">
                     <h2 class="text-lg font-semibold text-gray-900 mb-4">Journey Timeline</h2>
                     <div id="timeline-container" class="relative border-l-2 border-slate-300 pl-6 space-y-8"></div>
                 </aside>
                 <section class="flex-1 flex flex-col bg-slate-100 relative">
                     <div class="border-b border-slate-200 p-4 space-y-3">
-                        <div class="flex items-center justify-between">
-                            <h2 id="conversation-title" class="text-lg font-semibold text-gray-900">Full Conversation</h2>
-                            <div class="flex gap-2 md:hidden">
-                                <button id="toggle-timeline-btn" class="bg-slate-200 text-slate-700 text-xs font-bold py-1 px-2 rounded">Timeline</button>
-                                <button id="toggle-metrics-btn" class="bg-slate-200 text-slate-700 text-xs font-bold py-1 px-2 rounded">Metrics</button>
-                            </div>
-                        </div>
+                        <h2 id="conversation-title" class="text-lg font-semibold text-gray-900">Full Conversation</h2>
                         <div id="filter-container" class="flex flex-wrap gap-2"></div>
                     </div>
                     <div id="conversation-container" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
@@ -143,14 +132,14 @@
                         </div>
                     </div>
                 </section>
-                <aside id="metrics-sidebar" class="w-full md:w-1/3 lg:w-1/4 bg-white border-l border-slate-200 overflow-y-auto p-6 hidden md:block">
+                <aside class="w-1/3 lg:w-1/4 bg-white border-l border-slate-200 overflow-y-auto p-6">
                     <h2 class="text-lg font-semibold text-gray-900 mb-4">Internal Metrics</h2>
                     <div id="metrics-container" class="space-y-4"></div>
                 </aside>
             </main>
 
             <!-- Health Status Page -->
-            <main id="page-status" class="page-content hidden h-full p-4 md:p-8">
+            <main id="page-status" class="page-content hidden h-full p-8">
                 <h2 class="text-3xl font-bold text-gray-900 mb-6">Health Status Dashboard</h2>
                 <div id="health-status-container" class="space-y-8">
                     <!-- Health status content will be injected here -->
@@ -158,7 +147,7 @@
             </main>
 
             <!-- Profile Page -->
-            <main id="page-profile" class="page-content hidden h-full p-4 md:p-8">
+            <main id="page-profile" class="page-content hidden h-full p-8">
                 <h2 class="text-3xl font-bold text-gray-900 mb-6">Member Profile</h2>
                 <div id="profile-container" class="bg-white p-6 rounded-lg shadow-md grid grid-cols-1 md:grid-cols-2 gap-6"></div>
             </main>
@@ -186,15 +175,6 @@
             profile: document.getElementById('page-profile'),
         };
         const navButtons = document.querySelectorAll('.nav-btn');
-        const menuBtn = document.getElementById('menu-btn');
-        const navMenu = document.getElementById('nav-menu');
-        
-        // Journey Page Elements
-        const timelineSidebar = document.getElementById('timeline-sidebar');
-        const metricsSidebar = document.getElementById('metrics-sidebar');
-        const toggleTimelineBtn = document.getElementById('toggle-timeline-btn');
-        const toggleMetricsBtn = document.getElementById('toggle-metrics-btn');
-
         const homeContainer = document.getElementById('home-container');
         const timelineContainer = document.getElementById('timeline-container');
         const conversationContainer = document.getElementById('conversation-container');
@@ -224,9 +204,9 @@
         const ROLE_ICONS = { 'Concierge': '📞', 'Medical Strategist': '🩺', 'Performance Scientist': '📊', 'Nutritionist': '🍎', 'Physiotherapist': '💪', 'Concierge Lead': '⭐', 'Member': '👤', 'Personal Assistant': '📋' };
 
         // --- API FUNCTIONS ---
-        async function fetchData(endpoint) {
+        async function fetchData(endpoint, options = {}) {
             try {
-                const response = await fetch(`${API_BASE_URL}${endpoint}`);
+                const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
                 if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
                 if (apiIndicator.classList.contains('bg-yellow-500')) {
                     apiIndicator.classList.remove('bg-yellow-500', 'animate-pulse');
@@ -430,30 +410,40 @@
             traceData.reasons.forEach(reason => {
                 const reasonEl = document.querySelector(`[data-message-id='${reason.id}'] > div`);
                 if (reasonEl) reasonEl.classList.add('highlight-reason');
-            })
+            });
         }
 
-        // --- CHAT AGENT LOGIC (SIMULATED) ---
-        function findDecisionAndReasons(query) {
-            const keywords = query.toLowerCase().match(/\b(\w+)\b/g) || [];
-            const decisions = allMessages.filter(m => m.tags.type === 'decision');
-            let bestMatch = null;
-            let maxScore = 0;
-            decisions.forEach(decision => {
-                let score = 0;
-                keywords.forEach(keyword => {
-                    if (decision.content.toLowerCase().includes(keyword)) score++;
+        // --- CHAT AGENT LOGIC ---
+        async function handleChatSubmit(event) {
+            event.preventDefault();
+            const query = chatInput.value.trim();
+            if (!query) return;
+
+            addChatMessage(query, true);
+            chatInput.value = '';
+            
+            const thinkingMessage = document.createElement('div');
+            thinkingMessage.className = 'p-2 bg-indigo-100 rounded-lg text-sm animate-pulse';
+            thinkingMessage.textContent = 'Thinking...';
+            chatMessages.appendChild(thinkingMessage);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            try {
+                const data = await fetchData('/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query: query })
                 });
-                if (score > maxScore) {
-                    maxScore = score;
-                    bestMatch = decision;
+                thinkingMessage.remove();
+                if (data && data.answer) {
+                    addChatMessage(data.answer);
+                } else {
+                    addChatMessage("Sorry, I received an unexpected response from the AI model.");
                 }
-            });
-            if (bestMatch) {
-                const reasons = allMessages.filter(m => m.tags.type === 'reason' && m.tags.linked_id === bestMatch.id);
-                return { decision: bestMatch, reasons };
+            } catch (error) {
+                thinkingMessage.remove();
+                addChatMessage("Sorry, I couldn't connect to the AI model. Please check the server.");
             }
-            return null;
         }
 
         function addChatMessage(message, isUser = false) {
@@ -532,26 +522,6 @@
             renderAnalysisModal(`Weekly Report: ${reportData.week_of}`, reportData.summary);
         }
 
-        function handleChatSubmit(event) {
-            event.preventDefault();
-            const query = chatInput.value.trim();
-            if (!query) return;
-            addChatMessage(query, true);
-            chatInput.value = '';
-            const result = findDecisionAndReasons(query);
-            if (result && result.reasons.length > 0) {
-                let response = `The decision to "${result.decision.content.substring(0, 50)}..." was made for the following reasons:<ul class="list-disc list-inside mt-2">`;
-                result.reasons.forEach(reason => {
-                    response += `<li>${reason.content}</li>`;
-                });
-                response += '</ul>';
-                addChatMessage(response);
-                highlightTrace(result);
-            } else {
-                addChatMessage("I couldn't find a specific reason for that decision in the log. Please try rephrasing your question or check the conversation manually.");
-            }
-        }
-        
         function handleHomePageCardClick(event) {
             const card = event.target.closest('[data-page="journey"]');
             if (!card) return;
@@ -594,21 +564,6 @@
             chatCloseBtn.addEventListener('click', () => { chatAgentWindow.style.display = 'none'; });
             chatForm.addEventListener('submit', handleChatSubmit);
             
-            // Responsive Menu Toggle
-            menuBtn.addEventListener('click', () => {
-                navMenu.classList.toggle('hidden');
-            });
-            
-            // Responsive Sidebar Toggles
-            toggleTimelineBtn.addEventListener('click', () => {
-                timelineSidebar.classList.toggle('hidden');
-                metricsSidebar.classList.add('hidden'); // Hide other sidebar
-            });
-            toggleMetricsBtn.addEventListener('click', () => {
-                metricsSidebar.classList.toggle('hidden');
-                timelineSidebar.classList.add('hidden'); // Hide other sidebar
-            });
-
             modalCloseBtn.onclick = () => { modal.style.display = "none"; };
             window.onclick = (event) => { if (event.target == modal) { modal.style.display = "none"; } };
         }
