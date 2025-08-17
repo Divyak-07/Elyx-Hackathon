@@ -46,7 +46,9 @@ app = FastAPI(
 
 # --- CORS Middleware ---
 # FIX: Allow all origins to prevent CORS errors with the deployed frontend.
-origins = ["*"]
+origins = ["http://localhost",
+    "http://localhost:8080",
+    "https://elyx-hackathon.netlify.app"]
 
 app.add_middleware(
     CORSMiddleware,
