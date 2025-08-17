@@ -1,13 +1,14 @@
 # main.py
-# This is the simplified backend. The AI /chat endpoint has been removed.
-# Its only job is to serve the journey_data.json file.
+# This file contains the FastAPI application updated to call the Google Gemini model.
 
 import json
+import os
 from typing import List, Optional, Dict
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Body
 from pydantic import BaseModel
 from datetime import datetime
 from fastapi.middleware.cors import CORSMiddleware
+import google.generativeai as genai
 
 # --- Pydantic Models for Data Validation ---
 class Tag(BaseModel):
@@ -32,6 +33,9 @@ class EpisodeAnalysis(BaseModel):
     friction_points: List[str]
     final_outcome: str
     persona_analysis: PersonaState
+    
+class ChatQuery(BaseModel):
+    query: str
 
 # --- FastAPI Application Setup ---
 app = FastAPI(
@@ -55,113 +59,106 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# --- Configure Google AI Client ---
+# The API key is read from an environment variable set in Render.
+try:
+    genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
+except Exception as e:
+    print(f"Could not configure Google AI: {e}")
+
+
 # --- Data Loading ---
 def load_journey_data() -> List[Message]:
     try:
         with open("journey_data.json", "r") as f:
             data = json.load(f)
             return [Message(**item) for item in data]
-    except FileNotFoundError:
-        print("ERROR: journey_data.json not found.")
-        return []
     except Exception as e:
-        print(f"An error occurred loading JSON data: {e}")
+        print(f"Error loading data: {e}")
         return []
 
 MESSAGES = load_journey_data()
 
-# --- AI Analysis Simulation ---
+# --- AI SIMULATION & GENERATION FUNCTIONS ---
 def get_ai_analysis(month_name: str, messages: List[Message]) -> EpisodeAnalysis:
+    # This remains a simulation for the persona analysis feature
     pre_written_analyses = {
-        "February 2025": {
-            "primary_goal_trigger": "Rohan expresses anxiety over an upcoming board presentation, citing dizziness and fatigue. The team makes this a key milestone.",
-            "friction_points": ["Rohan notes his Garmin HR zones are wrong.", "He feels the initial Health Optimization Plan is sparse ('mostly headings').", "Impatience over delays in receiving medical records."],
-            "final_outcome": "A foundational plan is created, a successful jet-lag experiment is conducted, and a decision is made to upgrade his wearable to a Whoop strap for better data.",
-            "persona_analysis": { "before": "Anxious and data-skeptical, questioning the value and speed of the service.", "after": "Becoming more engaged after seeing a tangible win (jet-lag experiment) and a clear path forward (Whoop upgrade)." }
-        },
-        "May 2025": {
-            "primary_goal_trigger": "Rohan wakes up with a sudden viral illness, jeopardizing a major presentation.",
-            "friction_points": ["Significant frustration over the setback and feeling that progress is being undone.", "The need to postpone a critical work commitment."],
-            "final_outcome": "The Elyx team executes a 'Sick Day Protocol,' managing the illness with data from his wearable, coordinating logistics, and providing a medical letter. Rohan recovers and the team structures his safe return to training.",
-            "persona_analysis": { "before": "Feeling confident and seeing consistent progress in his health metrics.", "after": "Frustrated by the setback, but ultimately sees the value of the team's crisis management, making the plan more robust." }
-        },
-        "August 2025": {
-            "primary_goal_trigger": "With a stable health baseline, Rohan shifts his focus to setting long-term, ambitious goals for longevity and peak performance.",
-            "friction_points": ["Significant muscle soreness from a new strength program affects his work focus.", "Minor irritation from the Whoop strap requires logistical support."],
-            "final_outcome": "Long-term, measurable goals are formalized (e.g., deadlift 1.5x bodyweight). New experiments are run to optimize recovery. Rohan decides to pursue learning piano as a cognitive longevity intervention.",
-            "persona_analysis": { "before": "An engaged member focused on optimizing current health metrics.", "after": "A proactive co-manager of his health, thinking in multi-year timelines and integrating health goals (piano) with cognitive performance." }
-        }
+        "February 2025": { "primary_goal_trigger": "Rohan expresses anxiety over an upcoming board presentation...", "friction_points": ["Garmin HR zones wrong...", "Plan is sparse..."], "final_outcome": "A foundational plan is created...", "persona_analysis": { "before": "Anxious and data-skeptical...", "after": "Becoming more engaged..." } },
+        "May 2025": { "primary_goal_trigger": "Rohan wakes up with a sudden viral illness...", "friction_points": ["Frustration over setback..."], "final_outcome": "The team executes a 'Sick Day Protocol'...", "persona_analysis": { "before": "Feeling confident...", "after": "Frustrated but sees value..." } },
+        "August 2025": { "primary_goal_trigger": "Rohan shifts focus to long-term goals...", "friction_points": ["Muscle soreness...", "Whoop strap rash..."], "final_outcome": "Long-term goals are formalized...", "persona_analysis": { "before": "Engaged member...", "after": "Proactive co-manager..." } }
     }
     if month_name in pre_written_analyses:
         return EpisodeAnalysis(month_name=month_name, **pre_written_analyses[month_name])
     else:
-        return EpisodeAnalysis(
-            month_name=month_name,
-            primary_goal_trigger="Ongoing health optimization and data tracking.",
-            friction_points=["General logistical coordination for travel and appointments."],
-            final_outcome="Steady progress on established health goals.",
-            persona_analysis={ "before": "Following the established plan.", "after": "More integrated and consistent with the established health protocols." }
-        )
+        return EpisodeAnalysis(month_name=month_name, primary_goal_trigger="Ongoing health optimization.", friction_points=["Logistical coordination."], final_outcome="Steady progress.", persona_analysis={ "before": "Following the plan.", "after": "More consistent." })
 
 # --- API Endpoints ---
 @app.get("/", tags=["General"])
-async def read_root():
-    return {"message": "Welcome to the Elyx Member Journey API"}
+async def read_root(): return {"message": "Welcome to the Elyx Member Journey API"}
 
 @app.get("/messages", response_model=List[Message], tags=["Messages"])
 async def get_all_messages():
-    if not MESSAGES:
-        raise HTTPException(status_code=404, detail="Journey data not loaded.")
+    if not MESSAGES: raise HTTPException(status_code=404, detail="Journey data not loaded.")
     return MESSAGES
 
+# ... (other existing endpoints remain the same) ...
 @app.get("/messages/timeline", response_model=List[Message], tags=["Messages"])
 async def get_timeline_events():
     milestones = [msg for msg in MESSAGES if msg.tags.type == 'milestone']
-    if not milestones:
-        raise HTTPException(status_code=404, detail="No milestone events found.")
+    if not milestones: raise HTTPException(status_code=404, detail="No milestone events found.")
     return milestones
 
 @app.get("/messages/decision/{message_id}", response_model=Dict, tags=["Messages"])
 async def get_decision_and_reasons(message_id: int):
     decision_message = next((msg for msg in MESSAGES if msg.id == message_id and msg.tags.type == 'decision'), None)
-    if not decision_message:
-        raise HTTPException(status_code=404, detail=f"Decision with ID {message_id} not found.")
-    
+    if not decision_message: raise HTTPException(status_code=404, detail=f"Decision with ID {message_id} not found.")
     reason_messages = [msg for msg in MESSAGES if msg.tags.type == 'reason' and msg.tags.linked_id == message_id]
-    
     return {"decision": decision_message, "reasons": reason_messages}
 
 @app.get("/metrics/internal", response_model=Dict, tags=["Metrics"])
 async def get_internal_metrics():
-    if not MESSAGES:
-        raise HTTPException(status_code=404, detail="Journey data not loaded.")
-    
+    if not MESSAGES: raise HTTPException(status_code=404, detail="Journey data not loaded.")
     role_counts = {}
     for msg in MESSAGES:
         if msg.role not in ["Member", "Personal Assistant"]:
             role_counts[msg.role] = role_counts.get(msg.role, 0) + 1
-            
-    return {
-        "total_elyx_team_interactions": sum(role_counts.values()),
-        "interactions_by_role": role_counts
-    }
+    return {"total_elyx_team_interactions": sum(role_counts.values()), "interactions_by_role": role_counts}
 
 @app.get("/episodes/{month_name}", response_model=EpisodeAnalysis, tags=["Episodes"])
 async def get_episode_analysis(month_name: str):
     try:
-        month_messages = [
-            msg for msg in MESSAGES 
-            if datetime.strptime(msg.timestamp.strftime('%B %Y'), '%B %Y') == datetime.strptime(month_name, '%B %Y')
-        ]
+        month_messages = [msg for msg in MESSAGES if datetime.strptime(msg.timestamp.strftime('%B %Y'), '%B %Y') == datetime.strptime(month_name, '%B %Y')]
     except ValueError:
         raise HTTPException(status_code=400, detail="Invalid month format. Use 'Month YYYY'.")
+    if not month_messages: raise HTTPException(status_code=404, detail=f"No data found for {month_name}.")
+    return get_ai_analysis(month_name, month_messages)
 
-    if not month_messages:
-         raise HTTPException(status_code=404, detail=f"No data found for {month_name}.")
+@app.post("/chat", tags=["AI Agent"])
+async def chat_with_agent(payload: ChatQuery):
+    """
+    NEW: Takes a user query, sends it to the Gemini model with conversation context,
+    and returns the AI-generated answer.
+    """
+    if not genai.api_key:
+        raise HTTPException(status_code=500, detail="Google API key is not configured on the server.")
 
-    analysis = get_ai_analysis(month_name, month_messages)
-    return analysis
+    # Create a simplified string of the entire conversation for context
+    conversation_context = "\n".join([f"[{msg.timestamp.strftime('%Y-%m-%d')}] {msg.sender}: {msg.content}" for msg in MESSAGES])
 
+    prompt = f"""
+    You are the Elyx AI assistant. Your role is to answer questions about a member's health journey based ONLY on the conversation history provided below.
+    Be concise and helpful. Find the relevant decision and explain the reasons that led to it based on the conversation.
 
+    --- CONVERSATION HISTORY ---
+    {conversation_context}
+    ----------------------------
 
+    Based on the history, please answer the following question: "{payload.query}"
+    """
 
+    try:
+        model = genai.GenerativeModel('gemini-pro')
+        response = model.generate_content(prompt)
+        return {"answer": response.text}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error communicating with Google AI: {str(e)}")
