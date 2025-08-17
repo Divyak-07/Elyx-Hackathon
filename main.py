@@ -48,7 +48,8 @@ app = FastAPI(
 origins = [
     "https://elyx-hackathon.netlify.app",
     "http://localhost:3000",
-    "http://127.0.0.1:5500"
+    "http://127.0.0.1:5500",
+    "null" # Added for local file access in browser
 ]
 app.add_middleware(
     CORSMiddleware,
@@ -60,6 +61,7 @@ app.add_middleware(
 
 # --- Google Gemini ---
 try:
+    # IMPORTANT: Set your GOOGLE_API_KEY as an environment variable
     genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
 except Exception as e:
     print(f"Could not configure Google AI: {e}")
@@ -87,37 +89,48 @@ MESSAGES = load_journey_data()
 
 # --- AI Functions ---
 def get_ai_analysis(month_name: str, messages: List[Message]) -> EpisodeAnalysis:
-    month_msgs = [m for m in messages if m.timestamp.strftime("%B %Y") == month_name]
+    # Find the messages for the specified month
+    month_msgs_str = []
+    for m in messages:
+        # Format timestamp to easily match month name
+        if m.timestamp.strftime("%B %Y") == month_name:
+            month_msgs_str.append(json.dumps(m.dict(), indent=2, default=str))
 
     prompt = f"""
-    Analyze Rohan Patel's health journey in {month_name}.
-    Messages:
-    {json.dumps([m.dict() for m in month_msgs], indent=2, default=str)}
+    Analyze the health journey of Rohan Patel for the month of {month_name}.
+    Here are the messages for this month:
+    {month_msgs_str}
 
-    Provide:
-    - Primary goal/trigger
-    - Friction points (list)
-    - Final outcome
-    - Persona analysis: before and after
+    Based on these messages, please provide a concise analysis in the following JSON format:
+    {{
+      "month_name": "{month_name}",
+      "primary_goal_trigger": "A short description of the main focus or event of the month.",
+      "friction_points": ["A list of challenges or frustrations encountered.", "Another challenge."],
+      "final_outcome": "A summary of the result or resolution by the end of the month.",
+      "persona_analysis": {{
+        "before": "Rohan's state of mind or engagement level at the start of the month.",
+        "after": "Rohan's state of mind or engagement level at the end of the month."
+      }}
+    }}
     """
     ai_text = generate_with_gemini(prompt)
 
-    if not ai_text or "AI service is currently unavailable" in ai_text:
+    try:
+        # Clean the response to ensure it's valid JSON
+        cleaned_response = ai_text.strip().replace("```json", "").replace("```", "")
+        analysis_data = json.loads(cleaned_response)
+        return EpisodeAnalysis(**analysis_data)
+    except (json.JSONDecodeError, TypeError) as e:
+        print(f"Error decoding AI analysis response: {e}")
+        # Fallback to a default response if AI fails
         return EpisodeAnalysis(
             month_name=month_name,
-            primary_goal_trigger="Ongoing health optimization.",
-            friction_points=["Coordination challenges."],
-            final_outcome="Steady progress.",
-            persona_analysis=PersonaState(before="Following plan", after="More consistent")
+            primary_goal_trigger="Analysis is currently unavailable.",
+            friction_points=[],
+            final_outcome="Could not generate a summary.",
+            persona_analysis=PersonaState(before="N/A", after="N/A")
         )
 
-    return EpisodeAnalysis(
-        month_name=month_name,
-        primary_goal_trigger=ai_text,
-        friction_points=[],
-        final_outcome="See AI summary above",
-        persona_analysis=PersonaState(before="", after="")
-    )
 
 # --- API Endpoints ---
 @app.get("/")
@@ -153,31 +166,31 @@ async def get_internal_metrics():
             role_counts[msg.role] = role_counts.get(msg.role, 0) + 1
     return {"total_elyx_team_interactions": sum(role_counts.values()), "interactions_by_role": role_counts}
 
-@app.get("/metrics/sentiment")
-async def get_sentiment_metrics():
-    return [
-        {"month": "January 2025", "score": -0.2},
-        {"month": "February 2025", "score": 0.1},
-        {"month": "March 2025", "score": -0.5},
-        {"month": "April 2025", "score": 0.4},
-        {"month": "May 2025", "score": -0.3},
-        {"month": "June 2025", "score": 0.7},
-        {"month": "July 2025", "score": 0.8},
-        {"month": "August 2025", "score": 0.9}
-    ]
-
-@app.get("/reports/weekly")
-async def get_weekly_report():
-    prompt = "Summarize key events in Rohan Patel's health journey this week. Output in HTML bullet points."
-    ai_summary = generate_with_gemini(prompt)
-    return {"week_of": "August 11, 2025", "summary": ai_summary}
-
-@app.get("/analysis/{month_name}", response_model=EpisodeAnalysis)
-async def analyze_month(month_name: str):
-    return get_ai_analysis(month_name, MESSAGES)
+@app.get("/episodes/{month_name}", response_model=EpisodeAnalysis)
+async def analyze_month_endpoint(month_name: str):
+    # URL encoding might replace spaces with %20
+    decoded_month_name = month_name.replace("%20", " ")
+    return get_ai_analysis(decoded_month_name, MESSAGES)
 
 @app.post("/chat")
 async def chat_with_ai(query: ChatQuery):
-    prompt = f"Answer the question: {query.query}\nUse Rohan Patel's journey as context."
+    # Construct a detailed context from the entire journey
+    context = "\n".join([f"- {m.sender} ({m.role}) on {m.timestamp.strftime('%B %d, %Y')}: {m.content}" for m in MESSAGES])
+    
+    prompt = f"""
+    You are an AI assistant for Elyx, a personalized health service. Your name is Elyx AI.
+    Your task is to answer questions about the health journey of a member named Rohan Patel.
+    You must answer based *only* on the conversation history provided below.
+    Be friendly, concise, and helpful.
+    If the answer cannot be found in the conversation history, state that you do not have that information in the provided context.
+
+    Here is the full conversation history for Rohan Patel's journey:
+    ---
+    {context}
+    ---
+
+    Based on the provided history, please answer the following question:
+    Question: "{query.query}"
+    """
     ai_response = generate_with_gemini(prompt)
     return {"response": ai_response}
