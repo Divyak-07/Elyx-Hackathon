@@ -1,14 +1,12 @@
 # main.py
-# This file contains the FastAPI application updated to call the Google Gemini model.
+# This is the simplified backend. The AI /chat and /metrics/internal endpoints have been removed.
 
 import json
-import os
 from typing import List, Optional, Dict
-from fastapi import FastAPI, HTTPException, Body
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from datetime import datetime
 from fastapi.middleware.cors import CORSMiddleware
-import google.generativeai as genai
 
 # --- Pydantic Models for Data Validation ---
 class Tag(BaseModel):
@@ -33,9 +31,6 @@ class EpisodeAnalysis(BaseModel):
     friction_points: List[str]
     final_outcome: str
     persona_analysis: PersonaState
-    
-class ChatQuery(BaseModel):
-    query: str
 
 class SentimentPoint(BaseModel):
     month: str
@@ -67,14 +62,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# --- Configure Google AI Client ---
-# The API key is read from an environment variable set in Render.
-try:
-    genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
-except Exception as e:
-    print(f"Could not configure Google AI: {e}")
-
-
 # --- Data Loading ---
 def load_journey_data() -> List[Message]:
     try:
@@ -87,10 +74,9 @@ def load_journey_data() -> List[Message]:
 
 MESSAGES = load_journey_data()
 
+# --- AI SIMULATION FUNCTIONS ---
 
-# --- AI SIMULATION & GENERATION FUNCTIONS ---
 def get_ai_analysis(month_name: str, messages: List[Message]) -> EpisodeAnalysis:
-    # This remains a simulation for the persona analysis feature
     pre_written_analyses = {
         "February 2025": { "primary_goal_trigger": "Rohan expresses anxiety over an upcoming board presentation...", "friction_points": ["Garmin HR zones wrong...", "Plan is sparse..."], "final_outcome": "A foundational plan is created...", "persona_analysis": { "before": "Anxious and data-skeptical...", "after": "Becoming more engaged..." } },
         "May 2025": { "primary_goal_trigger": "Rohan wakes up with a sudden viral illness...", "friction_points": ["Frustration over setback..."], "final_outcome": "The team executes a 'Sick Day Protocol'...", "persona_analysis": { "before": "Feeling confident...", "after": "Frustrated but sees value..." } },
@@ -162,29 +148,6 @@ async def get_decision_and_reasons(message_id: int):
     reason_messages = [msg for msg in MESSAGES if msg.tags.type == 'reason' and msg.tags.linked_id == message_id]
     return {"decision": decision_message, "reasons": reason_messages}
 
-@app.get("/metrics/internal", tags=["Metrics"])
-async def get_internal_metrics():
-    if not MESSAGES:
-        raise HTTPException(status_code=404, detail="Journey data not loaded.")
-
-    role_counts: Dict[str, int] = {}
-
-    for msg in MESSAGES:
-        try:
-            role = msg.get("role")
-            if isinstance(role, str) and role not in ["Member", "Personal Assistant"]:
-                role_counts[role] = role_counts.get(role, 0) + 1
-        except Exception as e:
-            print(f"Error processing message: {msg}, error: {e}")
-
-    return {
-        "total_elyx_team_interactions": int(sum(role_counts.values())),
-        "interactions_by_role": {str(k): int(v) for k, v in role_counts.items()},
-        "debug_roles": list(sorted(set([str(m.get("role")) for m in MESSAGES if m.get("role")]))),
-        "debug_message_example": MESSAGES[0] if MESSAGES else {}
-    }
-
-
 @app.get("/episodes/{month_name}", response_model=EpisodeAnalysis, tags=["Episodes"])
 async def get_episode_analysis(month_name: str):
     try:
@@ -203,28 +166,3 @@ async def get_sentiment_trend():
 async def generate_weekly_report(end_date: str = "2025-08-18"):
     if not MESSAGES: raise HTTPException(status_code=404, detail="Journey data not loaded.")
     return get_weekly_report(end_date)
-    
-@app.post("/chat", tags=["AI Agent"])
-async def chat_with_agent(payload: ChatQuery):
-    if not genai.api_key:
-        raise HTTPException(status_code=500, detail="Google API key is not configured on the server.")
-
-    conversation_context = "\n".join([f"[{msg.timestamp.strftime('%Y-%m-%d')}] {msg.sender}: {msg.content}" for msg in MESSAGES])
-
-    prompt = f"""
-    You are the Elyx AI assistant. Your role is to answer questions about a member's health journey based ONLY on the conversation history provided below.
-    Be concise and helpful. Find the relevant decision and explain the reasons that led to it based on the conversation.
-
-    --- CONVERSATION HISTORY ---
-    {conversation_context}
-    ----------------------------
-
-    Based on the history, please answer the following question: "{payload.query}"
-    """
-
-    try:
-        model = genai.GenerativeModel('gemini-pro')
-        response = model.generate_content(prompt)
-        return {"answer": response.text}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error communicating with Google AI: {str(e)}")
