@@ -87,6 +87,7 @@ def load_journey_data() -> List[Message]:
 
 MESSAGES = load_journey_data()
 
+
 # --- AI SIMULATION & GENERATION FUNCTIONS ---
 def get_ai_analysis(month_name: str, messages: List[Message]) -> EpisodeAnalysis:
     # This remains a simulation for the persona analysis feature
@@ -161,11 +162,28 @@ async def get_decision_and_reasons(message_id: int):
     reason_messages = [msg for msg in MESSAGES if msg.tags.type == 'reason' and msg.tags.linked_id == message_id]
     return {"decision": decision_message, "reasons": reason_messages}
 
-@app.get("/metrics/internal", response_model=Dict, tags=["Metrics"])
+@app.get("/metrics/internal", tags=["Metrics"])
 async def get_internal_metrics():
-    if not MESSAGES: raise HTTPException(status_code=404, detail="Journey data not loaded.")
-    role_counts = {msg.role: role_counts.get(msg.role, 0) + 1 for msg in MESSAGES if msg.role not in ["Member", "Personal Assistant"]}
-    return {"total_elyx_team_interactions": sum(role_counts.values()), "interactions_by_role": role_counts}
+    if not MESSAGES:
+        raise HTTPException(status_code=404, detail="Journey data not loaded.")
+
+    role_counts: Dict[str, int] = {}
+
+    for msg in MESSAGES:
+        try:
+            role = msg.get("role")
+            if isinstance(role, str) and role not in ["Member", "Personal Assistant"]:
+                role_counts[role] = role_counts.get(role, 0) + 1
+        except Exception as e:
+            print(f"Error processing message: {msg}, error: {e}")
+
+    return {
+        "total_elyx_team_interactions": int(sum(role_counts.values())),
+        "interactions_by_role": {str(k): int(v) for k, v in role_counts.items()},
+        "debug_roles": list(sorted(set([str(m.get("role")) for m in MESSAGES if m.get("role")]))),
+        "debug_message_example": MESSAGES[0] if MESSAGES else {}
+    }
+
 
 @app.get("/episodes/{month_name}", response_model=EpisodeAnalysis, tags=["Episodes"])
 async def get_episode_analysis(month_name: str):
