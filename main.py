@@ -45,23 +45,27 @@ app = FastAPI(
 )
 
 # --- CORS ---
+# This is the section you need to update.
+# We have added your Netlify URL to the list of allowed origins.
 origins = [
-    "https://elyx-hackathon.netlify.app",
-    "http://localhost:3000",
-    "http://127.0.0.1:5500",
-    "null" # Added for local file access in browser
+    "https://elyx-hackathon.netlify.app", # Your deployed frontend
+    "http://localhost:3000",             # For local development
+    "http://127.0.0.1:5500",             # For local development
+    "null"                               # For opening index.html directly
 ]
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["*"], # Allows all methods (GET, POST, etc.)
+    allow_headers=["*"], # Allows all headers
 )
+
 
 # --- Google Gemini ---
 try:
-    # IMPORTANT: Set your GOOGLE_API_KEY as an environment variable
+    # IMPORTANT: Set your GOOGLE_API_KEY as an environment variable in Render
     genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
 except Exception as e:
     print(f"Could not configure Google AI: {e}")
@@ -89,10 +93,8 @@ MESSAGES = load_journey_data()
 
 # --- AI Functions ---
 def get_ai_analysis(month_name: str, messages: List[Message]) -> EpisodeAnalysis:
-    # Find the messages for the specified month
     month_msgs_str = []
     for m in messages:
-        # Format timestamp to easily match month name
         if m.timestamp.strftime("%B %Y") == month_name:
             month_msgs_str.append(json.dumps(m.dict(), indent=2, default=str))
 
@@ -116,13 +118,11 @@ def get_ai_analysis(month_name: str, messages: List[Message]) -> EpisodeAnalysis
     ai_text = generate_with_gemini(prompt)
 
     try:
-        # Clean the response to ensure it's valid JSON
         cleaned_response = ai_text.strip().replace("```json", "").replace("```", "")
         analysis_data = json.loads(cleaned_response)
         return EpisodeAnalysis(**analysis_data)
     except (json.JSONDecodeError, TypeError) as e:
         print(f"Error decoding AI analysis response: {e}")
-        # Fallback to a default response if AI fails
         return EpisodeAnalysis(
             month_name=month_name,
             primary_goal_trigger="Analysis is currently unavailable.",
@@ -130,7 +130,6 @@ def get_ai_analysis(month_name: str, messages: List[Message]) -> EpisodeAnalysis
             final_outcome="Could not generate a summary.",
             persona_analysis=PersonaState(before="N/A", after="N/A")
         )
-
 
 # --- API Endpoints ---
 @app.get("/")
@@ -168,13 +167,11 @@ async def get_internal_metrics():
 
 @app.get("/episodes/{month_name}", response_model=EpisodeAnalysis)
 async def analyze_month_endpoint(month_name: str):
-    # URL encoding might replace spaces with %20
     decoded_month_name = month_name.replace("%20", " ")
     return get_ai_analysis(decoded_month_name, MESSAGES)
 
 @app.post("/chat")
 async def chat_with_ai(query: ChatQuery):
-    # Construct a detailed context from the entire journey
     context = "\n".join([f"- {m.sender} ({m.role}) on {m.timestamp.strftime('%B %d, %Y')}: {m.content}" for m in MESSAGES])
     
     prompt = f"""
