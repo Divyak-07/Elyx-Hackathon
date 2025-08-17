@@ -351,7 +351,6 @@
         }
         
         function renderSentimentChart(data) {
-            // FIX: Add defensive check
             if (!data || data.length === 0) {
                 console.error("No data provided for sentiment chart.");
                 const chartContainer = document.getElementById('sentimentChart');
@@ -360,7 +359,6 @@
                 }
                 return;
             }
-            // End of FIX
             const ctx = document.getElementById('sentimentChart').getContext('2d');
             if (sentimentChart) sentimentChart.destroy();
             sentimentChart = new Chart(ctx, {
@@ -516,7 +514,12 @@
             modalBody.innerHTML = '<p>Generating AI weekly summary...</p>';
             modal.style.display = 'block';
             const reportData = await fetchData(`/reports/weekly`);
-            renderAnalysisModal(`Weekly Report: ${reportData.week_of}`, reportData.summary);
+            // FIX: Add defensive check
+            if (reportData) {
+                renderAnalysisModal(`Weekly Report: ${reportData.week_of}`, reportData.summary);
+            } else {
+                renderAnalysisModal('Error', '<p>Could not generate the weekly report. Please try again later.</p>');
+            }
         }
 
         function handleHomePageCardClick(event) {

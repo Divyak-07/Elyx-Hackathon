@@ -45,12 +45,9 @@ app = FastAPI(
 )
 
 # --- CORS Middleware ---
-origins = [
-    "null",
-    "http://localhost",
-    "http://localhost:8080",
-    "https://elyx-hackathon.netlify.app"
-]
+# FIX: Allow all origins to prevent CORS errors with the deployed frontend.
+origins = ["*"]
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -140,6 +137,26 @@ async def get_sentiment_metrics():
         {"month": "August 2025", "score": 0.9}
     ]
     return sentiment_data
+
+# FIX: Add the missing /reports/weekly endpoint
+@app.get("/reports/weekly", tags=["Reports"])
+async def get_weekly_report():
+    """
+    Generates a simulated AI-powered weekly summary.
+    """
+    return {
+        "week_of": "August 11, 2025",
+        "summary": """
+        <p>This week saw a strong focus on long-term goal setting and proactive health measures.</p>
+        <ul class='list-disc list-inside mt-2 space-y-1'>
+            <li><b>Structural Health:</b> Long-term goals for strength (Deadlift 1.5x bodyweight), cardio (Top 10% VO2 Max), and stability were formalized. This provides clear, measurable targets for the next 12-24 months.</li>
+            <li><b>Recovery Protocol:</b> A successful experiment was conducted using a post-workout protein/creatine shake, which subjectively reduced muscle soreness by 50% and objectively improved Whoop recovery scores. This protocol is now a permanent part of the plan.</li>
+            <li><b>Cognitive Health:</b> A new goal to learn piano was endorsed by the medical team as an excellent intervention for building cognitive reserve and promoting neuroplasticity.</li>
+            <li><b>Diagnostics:</b> Proactive diagnostics, including a DEXA scan, VO2 Max test, and a full-body MRI, have been scheduled for the upcoming weeks to establish a comprehensive health baseline.</li>
+        </ul>
+        <p class='mt-4'><b>Key takeaway:</b> The program is successfully transitioning from foundational stabilization to building a platform for high performance and longevity, with a focus on data-driven protocols and measurable, long-term goals.</p>
+        """
+    }
 
 @app.get("/episodes/{month_name}", response_model=EpisodeAnalysis, tags=["Episodes"])
 async def get_episode_analysis(month_name: str):
