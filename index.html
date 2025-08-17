@@ -4,16 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Elyx Member Journey | Rohan Patel</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js for Metrics Chart -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         /* Custom Styles */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f9fafb; /* Softer off-white background (gray-50) */
+            background-color: #f8fafc; /* Softer off-white background (slate-50) */
             color: #334155; /* Slate gray text */
         }
         ::-webkit-scrollbar { width: 8px; }
@@ -59,6 +62,7 @@
 <body class="antialiased">
 
     <div class="flex flex-col h-screen">
+        <!-- Header -->
         <header class="bg-slate-800 p-4 shadow-md z-10">
             <div class="max-w-7xl mx-auto">
                 <div class="flex justify-between items-center">
@@ -71,6 +75,7 @@
                         <div id="api-indicator" class="w-3 h-3 rounded-full bg-yellow-400 animate-pulse"></div>
                     </div>
                 </div>
+                <!-- Navigation Tabs -->
                 <nav class="mt-4">
                     <div class="flex space-x-2">
                         <button class="nav-btn active" data-page="home">Home</button>
@@ -82,14 +87,18 @@
             </div>
         </header>
 
+        <!-- Main Content Area -->
         <div class="flex-1 overflow-y-auto">
+            <!-- Home Page -->
             <main id="page-home" class="page-content p-8">
                 <h1 class="text-4xl font-bold text-slate-900">Welcome, Rohan!</h1>
                 <p class="text-lg text-slate-600 mt-1">This is your personalized health dashboard. Here, you'll find an overview of your progress, key metrics, and upcoming activities.</p>
                 <div id="home-container" class="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    </div>
+                    <!-- Home page cards will be injected here -->
+                </div>
             </main>
 
+            <!-- Journey Page -->
             <main id="page-journey" class="page-content hidden h-full flex">
                 <aside class="w-1/3 lg:w-1/4 bg-white border-r border-slate-200 overflow-y-auto p-6">
                     <h2 class="text-lg font-semibold text-gray-900 mb-4">Journey Timeline</h2>
@@ -129,12 +138,15 @@
                 </aside>
             </main>
 
+            <!-- Health Status Page -->
             <main id="page-status" class="page-content hidden h-full p-8">
                 <h2 class="text-3xl font-bold text-gray-900 mb-6">Health Status Dashboard</h2>
                 <div id="health-status-container" class="space-y-8">
-                    </div>
+                    <!-- Health status content will be injected here -->
+                </div>
             </main>
 
+            <!-- Profile Page -->
             <main id="page-profile" class="page-content hidden h-full p-8">
                 <h2 class="text-3xl font-bold text-gray-900 mb-6">Member Profile</h2>
                 <div id="profile-container" class="bg-white p-6 rounded-lg shadow-md grid grid-cols-1 md:grid-cols-2 gap-6"></div>
@@ -142,6 +154,7 @@
         </div>
     </div>
 
+    <!-- AI Analysis Modal -->
     <div id="analysis-modal" class="modal">
         <div class="modal-content">
             <span class="modal-close" id="modal-close-btn">&times;</span>
@@ -151,7 +164,7 @@
 
     <script>
         // --- CONFIGURATION ---
-        const API_BASE_URL = 'https://elyx-journey-api.onrender.com'; // Default for local development
+        const API_BASE_URL = 'https://elyx-journey-api.onrender.com';
 
         // --- DOM ELEMENT REFERENCES ---
         const apiIndicator = document.getElementById('api-indicator');
@@ -183,24 +196,26 @@
         // --- STATE MANAGEMENT ---
         let allMessages = [];
         let metricsChart = null;
+        let rhrChart = null;
         let hrvChart = null;
+        let sentimentChart = null;
 
         // --- MAPPING & HELPERS ---
         const ROLE_ICONS = { 'Concierge': '📞', 'Medical Strategist': '🩺', 'Performance Scientist': '📊', 'Nutritionist': '🍎', 'Physiotherapist': '💪', 'Concierge Lead': '⭐', 'Member': '👤', 'Personal Assistant': '📋' };
 
         // --- API FUNCTIONS ---
-        async function fetchData(endpoint) {
+        async function fetchData(endpoint, options = {}) {
             try {
-                const response = await fetch(`${API_BASE_URL}${endpoint}`);
+                const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
                 if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-                if (apiIndicator.classList.contains('bg-yellow-400')) {
-                    apiIndicator.classList.remove('bg-yellow-400', 'animate-pulse');
+                if (apiIndicator.classList.contains('bg-yellow-500')) {
+                    apiIndicator.classList.remove('bg-yellow-500', 'animate-pulse');
                     apiIndicator.classList.add('bg-green-500');
                 }
                 return await response.json();
             } catch (error) {
                 console.error(`Failed to fetch from ${endpoint}:`, error);
-                apiIndicator.classList.remove('bg-yellow-400', 'animate-pulse');
+                apiIndicator.classList.remove('bg-yellow-500', 'animate-pulse');
                 apiIndicator.classList.add('bg-red-500');
                 return null;
             }
@@ -212,20 +227,25 @@
                 <div class="bg-white p-6 rounded-lg shadow-md">
                     <h3 class="text-xl font-semibold text-slate-800 mb-4">Current Health Snapshot</h3>
                     <ul class="space-y-3 text-slate-600">
-                        <li><span class="font-semibold">Avg. HRV (7d):</span> <span class="font-bold text-green-600">55ms</span> (10% vs last month)</li>
-                        <li><span class="font-semibold">Avg. RHR (7d):</span> <span class="font-bold text-green-600">55bpm</span> (↓5bpm vs start)</li>
-                        <li><span class="font-semibold">ApoB:</span> <span class="font-bold text-orange-600">110 mg/dL</span> (Primary Goal)</li>
+                        <li>HRV: <span class="font-bold text-green-600">65ms</span> (15%)</li>
+                        <li>Resting HR: <span class="font-bold text-green-600">58bpm</span> (↓3bpm)</li>
+                        <li>Glucose Avg: <span class="font-bold text-green-600">95mg/dL</span> (Stable)</li>
                     </ul>
-                    <p class="text-sm text-slate-400 mt-4">Live data based on Whoop integration</p>
+                    <p class="text-sm text-slate-400 mt-4">Last updated: Aug 14, 2025</p>
                 </div>
                 <div class="bg-white p-6 rounded-lg shadow-md">
                     <h3 class="text-xl font-semibold text-slate-800 mb-4">Upcoming Activities</h3>
-                     <ul class="space-y-3 text-slate-600">
-                        <li><span class="font-semibold">Sep 5:</span> VO2 Max & DEXA scan</li>
-                        <li><span class="font-semibold">Sep 28:</span> Full-Body MRI (Prenuvo)</li>
-                        <li><span class="font-semibold">Ongoing:</span> Phase 1 Strength Program</li>
+                    <ul class="space-y-3 text-slate-600">
+                        <li>Aug 20: Strength Training Session (Rachel)</li>
+                        <li>Aug 22: Water Quality Test (Ruby)</li>
+                        <li>Sept 5: VO2 Max Test (Advik)</li>
                     </ul>
-                     <p class="text-sm text-slate-400 mt-4">Your plan is on track.</p>
+                     <p class="text-sm text-slate-400 mt-4">Stay on track with your personalized plan!</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md cursor-pointer hover:shadow-lg transition-shadow" id="weekly-report-card">
+                     <h3 class="text-xl font-semibold text-slate-800 mb-2">Weekly Summary</h3>
+                     <p class="text-sm text-slate-500 mb-4">Click to generate an AI-powered summary of the last week's progress and focus areas.</p>
+                     <button id="generate-report-btn" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-4 rounded-lg">Generate Report</button>
                 </div>
                 <div data-page="journey" class="bg-white p-6 rounded-lg shadow-md lg:col-span-2 cursor-pointer hover:shadow-lg transition-shadow">
                      <h3 class="text-xl font-semibold text-slate-800 mb-2">Recent Communications</h3>
@@ -237,16 +257,11 @@
         }
 
         function renderRecentCommunications(messages) {
-            const recentMessages = messages.slice(-3).reverse();
+            const recentMessages = messages.slice(-3);
             let commsHTML = '';
             recentMessages.forEach(msg => {
                 const icon = ROLE_ICONS[msg.role] || '👤';
-                commsHTML += `
-                    <div class="border-t border-slate-200 pt-3">
-                        <p class="text-sm font-semibold">${icon} ${msg.sender}</p>
-                        <p class="text-sm text-slate-500 italic">"${msg.content.substring(0, 100)}..."</p>
-                    </div>
-                `;
+                commsHTML += `<div class="border-t border-slate-200 pt-3"><p class="text-sm font-semibold">${icon} ${msg.sender}</p><p class="text-sm text-slate-500 italic">"${msg.content.substring(0, 70)}..."</p></div>`;
             });
             document.getElementById('recent-communications-container').innerHTML = commsHTML;
         }
@@ -276,7 +291,7 @@
         function renderConversation(messages, filterRole = null) {
             const container = conversationContainer;
             if (!messages || !container) return;
-            const filteredMessages = filterRole ? messages.filter(msg => msg.role === filterRole || msg.role === 'Member' || msg.sender === filterRole) : messages;
+            const filteredMessages = filterRole ? messages.filter(msg => msg.role === filterRole || msg.role === 'Member') : messages;
             conversationTitle.textContent = filterRole ? `Conversation with ${filterRole}` : 'Full Conversation';
             let conversationHTML = '';
             let lastDate = null;
@@ -319,72 +334,57 @@
         }
 
         function renderFilterControls(messages) {
-            const roles = [...new Set(messages.filter(m => m.role !== 'Member').map(m => m.sender))];
+            const roles = [...new Set(messages.filter(m => m.role !== 'Member' && m.role !== 'Personal Assistant').map(m => m.role))];
             let filterHTML = '<button class="filter-btn active px-3 py-1 text-sm font-medium rounded-full bg-indigo-600 text-white" data-role="all">All</button>';
             roles.forEach(role => {
-                 const person = messages.find(m => m.sender === role);
-                filterHTML += `<button class="filter-btn px-3 py-1 text-sm font-medium rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300" data-role="${role}">${ROLE_ICONS[person.role]} ${role}</button>`;
+                filterHTML += `<button class="filter-btn px-3 py-1 text-sm font-medium rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300" data-role="${role}">${ROLE_ICONS[role]} ${role}</button>`;
             });
             filterContainer.innerHTML = filterHTML;
         }
 
-        function renderHealthStatus(messages) {
+        function renderHealthStatus(messages, sentimentData) {
             const apoBMessage = messages.find(m => m.content.includes("Your ApoB is"));
             const apoBValue = apoBMessage ? apoBMessage.content.match(/ApoB is (\d+)/)[1] : 'N/A';
             
             let healthHTML = `
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                    <div class="bg-white p-6 rounded-lg shadow-md">
-                        <h3 class="font-semibold text-gray-800">Sleep Performance</h3>
-                        <p class="mt-2 text-3xl font-bold text-indigo-600">86%</p>
-                        <p class="text-sm text-gray-500">Optimal</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-lg shadow-md">
-                        <h3 class="font-semibold text-gray-800">Activity Goal</h3>
-                        <p class="mt-2 text-3xl font-bold text-indigo-600">94%</p>
-                        <p class="text-sm text-gray-500">Met</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-lg shadow-md">
-                        <h3 class="font-semibold text-gray-800">Readiness</h3>
-                        <p class="mt-2 text-3xl font-bold text-indigo-600">91%</p>
-                        <p class="text-sm text-gray-500">Ready to Go</p>
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <div class="bg-white p-6 rounded-lg shadow-md">
                         <h3 class="text-lg font-semibold text-gray-900">Key Biomarker: ApoB</h3>
                         <p class="text-4xl font-bold text-indigo-600 mt-2">${apoBValue} <span class="text-lg font-medium text-gray-500">mg/dL</span></p>
                         <p class="text-sm text-gray-500 mt-2">Last measured: March 2025. This is a primary focus for long-term risk reduction.</p>
                     </div>
                     <div class="bg-white p-6 rounded-lg shadow-md">
-                        <h3 class="text-lg font-semibold text-gray-900">Heart Rate Variability (HRV) Trend</h3>
-                        <canvas id="hrvChart"></canvas>
+                        <h3 class="text-lg font-semibold text-gray-900">Member Satisfaction Trend</h3>
+                        <canvas id="sentimentChart"></canvas>
                     </div>
                 </div>
             `;
             healthStatusContainer.innerHTML = healthHTML;
-
-            const hrvCtx = document.getElementById('hrvChart').getContext('2d');
-            if (hrvChart) hrvChart.destroy();
-            hrvChart = new Chart(hrvCtx, {
+            renderSentimentChart(sentimentData);
+        }
+        
+        function renderSentimentChart(data) {
+            const ctx = document.getElementById('sentimentChart').getContext('2d');
+            if (sentimentChart) sentimentChart.destroy();
+            sentimentChart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+                    labels: data.map(d => d.month.split(' ')[0]),
                     datasets: [{
-                        label: 'Avg HRV (ms)',
-                        data: [42, 41, 45, 48, 44, 49, 52, 55], // Simulated data based on journey
-                        borderColor: 'rgba(79, 70, 229, 1)',
-                        backgroundColor: 'rgba(79, 70, 229, 0.2)',
+                        label: 'Avg Sentiment Score',
+                        data: data.map(d => d.score),
+                        borderColor: 'rgba(22, 163, 74, 1)',
+                        backgroundColor: 'rgba(22, 163, 74, 0.2)',
                         fill: true,
                         tension: 0.4
                     }]
                 },
-                options: { scales: { x: { ticks: { color: '#374151' } }, y: { beginAtZero: false, ticks: { color: '#374151' } } }, plugins: { legend: { display: false } } }
+                options: { scales: { x: { ticks: { color: '#374151' } }, y: { ticks: { color: '#374151', min: -1, max: 1 } } }, plugins: { legend: { display: false } } }
             });
         }
 
         function renderProfilePage() {
-            const profileData = { "Name": "Rohan Patel", "Born": "12 March 1979 (Age 46)", "Occupation": "Regional Head of Sales, FinTech", "Residence": "Singapore", "Travel Hubs": "UK, US, South Korea, Jakarta", "Goal 1": "Reduce risk of heart disease by Dec 2026.", "Goal 2": "Enhance cognitive function by June 2026.", "Goal 3": "Implement annual full-body health screenings.", "Motivations": "Family history of heart disease; sustain career performance; be present for his young children.", "Personality": "Analytical, driven, values efficiency and evidence-based approaches.", "Wearables": "Garmin watch, Whoop 4.0" };
+            const profileData = { "Name": "Rohan Patel", "Born": "12 March 1979 (Age 46)", "Occupation": "Regional Head of Sales, FinTech", "Residence": "Singapore", "Travel Hubs": "UK, US, South Korea, Jakarta", "Goal 1": "Reduce risk of heart disease by Dec 2026.", "Goal 2": "Enhance cognitive function by June 2026.", "Goal 3": "Implement annual full-body health screenings.", "Motivations": "Family history of heart disease; sustain career performance; be present for his young children.", "Personality": "Analytical, driven, values efficiency and evidence-based approaches.", "Wearables": "Garmin watch (used for runs), considering Oura ring." };
             let profileHTML = '';
             for(const [key, value] of Object.entries(profileData)) {
                 profileHTML += `<div><p class="text-sm text-gray-500">${key}</p><p class="font-semibold text-gray-900">${value}</p></div>`;
@@ -392,25 +392,10 @@
             profileContainer.innerHTML = profileHTML;
         }
 
-        function renderAnalysisModal(analysis) {
-            if (!analysis) {
-                modalBody.innerHTML = '<p class="text-red-500">Could not load analysis for this episode.</p>';
-                return;
-            }
+        function renderAnalysisModal(title, content) {
             modalBody.innerHTML = `
-                <h2 class="text-2xl font-bold text-gray-900 mb-4">Episode Analysis: ${analysis.month_name}</h2>
-                <div class="space-y-4 text-gray-600">
-                    <div><h3 class="font-semibold text-indigo-600">Primary Goal / Trigger</h3><p>${analysis.primary_goal_trigger}</p></div>
-                    <div><h3 class="font-semibold text-indigo-600">Friction Points</h3><ul class="list-disc list-inside">${analysis.friction_points.map(fp => `<li>${fp}</li>`).join('') || '<li>None identified.</li>'}</ul></div>
-                    <div><h3 class="font-semibold text-indigo-600">Final Outcome</h3><p>${analysis.final_outcome}</p></div>
-                    <div>
-                        <h3 class="font-semibold text-indigo-600 mb-2">Stateful Persona Analysis</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="bg-gray-100 p-3 rounded-lg"><h4 class="font-semibold text-gray-700">Before State</h4><p class="text-sm">${analysis.persona_analysis.before}</p></div>
-                            <div class="bg-gray-100 p-3 rounded-lg"><h4 class="font-semibold text-gray-700">After State</h4><p class="text-sm">${analysis.persona_analysis.after}</p></div>
-                        </div>
-                    </div>
-                </div>
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">${title}</h2>
+                <div class="space-y-4 text-gray-600">${content}</div>
             `;
         }
 
@@ -427,13 +412,45 @@
                 if (reasonEl) reasonEl.classList.add('highlight-reason');
             });
         }
-        
+
+        // --- CHAT AGENT LOGIC ---
+        async function handleChatSubmit(event) {
+            event.preventDefault();
+            const query = chatInput.value.trim();
+            if (!query) return;
+
+            addChatMessage(query, true);
+            chatInput.value = '';
+            
+            const thinkingMessage = document.createElement('div');
+            thinkingMessage.className = 'p-2 bg-indigo-100 rounded-lg text-sm animate-pulse';
+            thinkingMessage.textContent = 'Thinking...';
+            chatMessages.appendChild(thinkingMessage);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            try {
+                const data = await fetchData('/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query: query })
+                });
+                thinkingMessage.remove();
+                if (data && data.answer) {
+                    addChatMessage(data.answer);
+                } else {
+                    addChatMessage("Sorry, I received an unexpected response from the AI model.");
+                }
+            } catch (error) {
+                thinkingMessage.remove();
+                addChatMessage("Sorry, I couldn't connect to the AI model. Please check the server.");
+            }
+        }
+
         function addChatMessage(message, isUser = false) {
-            const align = isUser ? 'justify-end' : 'justify-start';
             const bgColor = isUser ? 'bg-blue-600 text-white' : 'bg-indigo-100 text-indigo-800';
             const messageEl = document.createElement('div');
-            messageEl.className = `flex ${align}`;
-            messageEl.innerHTML = `<div class="max-w-xs p-3 rounded-lg text-sm ${bgColor}">${message}</div>`;
+            messageEl.className = `p-2 ${bgColor} rounded-lg text-sm`;
+            messageEl.innerHTML = message;
             chatMessages.appendChild(messageEl);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
@@ -481,47 +498,30 @@
             modalBody.innerHTML = '<p>Generating AI analysis...</p>';
             modal.style.display = 'block';
             const analysisData = await fetchData(`/episodes/${encodeURIComponent(monthName)}`);
-            renderAnalysisModal(analysisData);
-        }
-
-        async function handleChatSubmit(event) {
-            event.preventDefault();
-            const query = chatInput.value.trim();
-            if (!query) return;
-
-            addChatMessage(query, true);
-            chatInput.value = '';
-            const thinkingMessage = document.createElement('div');
-            thinkingMessage.className = 'p-2 bg-indigo-100 rounded-lg text-sm text-indigo-800';
-            thinkingMessage.textContent = 'Elyx AI is thinking...';
-            chatMessages.appendChild(thinkingMessage);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-
-            try {
-                const response = await fetch(`${API_BASE_URL}/chat`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ query: query }),
-                });
-
-                chatMessages.removeChild(thinkingMessage);
-
-                if (!response.ok) {
-                    throw new Error(`API error! Status: ${response.status}`);
-                }
-
-                const data = await response.json();
-                addChatMessage(data.response.replace(/\n/g, '<br>'), false);
-
-            } catch (error) {
-                console.error('Chat API error:', error);
-                chatMessages.removeChild(thinkingMessage);
-                addChatMessage("Sorry, I'm having trouble connecting to the AI service right now. Please try again later.", false);
-            }
+            const analysisHTML = `
+                <div class="space-y-4 text-gray-600">
+                    <div><h3 class="font-semibold text-indigo-600">Primary Goal / Trigger</h3><p>${analysisData.primary_goal_trigger}</p></div>
+                    <div><h3 class="font-semibold text-indigo-600">Friction Points</h3><ul class="list-disc list-inside">${analysisData.friction_points.map(fp => `<li>${fp}</li>`).join('')}</ul></div>
+                    <div><h3 class="font-semibold text-indigo-600">Final Outcome</h3><p>${analysisData.final_outcome}</p></div>
+                    <div>
+                        <h3 class="font-semibold text-indigo-600 mb-2">Stateful Persona Analysis</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-gray-100 p-3 rounded-lg"><h4 class="font-semibold text-green-600">Before State</h4><p class="text-sm">${analysisData.persona_analysis.before}</p></div>
+                            <div class="bg-gray-100 p-3 rounded-lg"><h4 class="font-semibold text-green-600">After State</h4><p class="text-sm">${analysisData.persona_analysis.after}</p></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            renderAnalysisModal(`Episode Analysis: ${analysisData.month_name}`, analysisHTML);
         }
         
+        async function handleReportGeneration() {
+            modalBody.innerHTML = '<p>Generating AI weekly summary...</p>';
+            modal.style.display = 'block';
+            const reportData = await fetchData(`/reports/weekly`);
+            renderAnalysisModal(`Weekly Report: ${reportData.week_of}`, reportData.summary);
+        }
+
         function handleHomePageCardClick(event) {
             const card = event.target.closest('[data-page="journey"]');
             if (!card) return;
@@ -533,23 +533,30 @@
 
         // --- INITIALIZATION ---
         async function initializeApp() {
-            const [timelineData, allMessagesData, metricsData] = await Promise.all([
+            const [timelineData, allMessagesData, metricsData, sentimentData] = await Promise.all([
                 fetchData('/messages/timeline'),
                 fetchData('/messages'),
-                fetchData('/metrics/internal')
+                fetchData('/metrics/internal'),
+                fetchData('/metrics/sentiment')
             ]);
             allMessages = allMessagesData || [];
 
+            // Render all components for all pages
             renderHomePage(allMessages);
             renderTimeline(timelineData);
             renderConversation(allMessages);
             renderMetrics(metricsData);
             renderFilterControls(allMessages);
-            renderHealthStatus(allMessages);
+            renderHealthStatus(allMessages, sentimentData);
             renderProfilePage();
 
             navButtons.forEach(btn => btn.addEventListener('click', handleNavClick));
             homeContainer.addEventListener('click', handleHomePageCardClick);
+            homeContainer.addEventListener('click', (event) => {
+                if(event.target.closest('#weekly-report-card')) {
+                    handleReportGeneration();
+                }
+            });
             conversationContainer.addEventListener('click', handleConversationClick);
             filterContainer.addEventListener('click', handleFilterClick);
             timelineContainer.addEventListener('click', handleTimelineClick);
