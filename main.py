@@ -46,13 +46,11 @@ app = FastAPI(
 
 # --- CORS Middleware ---
 origins = [
-    "https://elyx-hackathon.netlify.app",
-    "http://localhost",
-    "https://elyx-hackathon.onrender.com",
-    "http://localhost:8000"]
+    "https://elyx-hackathon.netlify.app"
+]
 
 app.add_middleware(
-    CORSMiddleware,
+    CORSMiddleware,     
     allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
